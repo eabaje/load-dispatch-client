@@ -20,7 +20,7 @@ function Shipper() {
 
               <p>
                 {" "}
-                While LoadBoard® is not a shipping company, we connect you to
+                While LoadDispatch® is not a shipping company, we connect you to
                 over 13,000 carriers ready to transport your vehicle. In
                 addition, we provide access to U.S. DOT license information,
                 insurance information and ratings for carriers as well as an
@@ -38,12 +38,12 @@ function Shipper() {
               <h2>Our process</h2>
               <ul>
                 <li>
-                  <i class="icon-check"></i> Post vehicle(s) on LoadBoard.
+                  <i class="icon-check"></i> Post vehicle(s) on LoadDispatch.
                   Interested Carriers will contact you by phone.
                 </li>
                 <li>
                   <i class="icon-check"></i>Review the Carrier profile on
-                  LoadBoard to verify Carrier meets criteria.
+                  LoadDispatch to verify Carrier meets criteria.
                 </li>
                 <li>
                   <i class="icon-check"></i>Assign Carrier to your vehicle

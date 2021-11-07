@@ -104,19 +104,19 @@ function Term() {
                   throughout the shipping process, including promptly notifying
                   all appropriate parties of any damage, loss, theft, or
                   unexpected delays in the pick-up or delivery of vehicles; (3)
-                  using LoadBoard’s "Dispatched to Me" page to update shipment
-                  status; (4) handling vehicles so as to avoid any damage to the
-                  vehicles; (5) providing LoadBoard with a copy of the bill of
-                  lading in the event of a dispute with a shipper; (6) providing
-                  appropriate parties with a completed and signed bill of
-                  lading/vehicle condition form upon delivery of the vehicles;
-                  (7) handling damage claims fairly and responsively; (8)
-                  promptly forwarding COD payments in excess of agreed upon
-                  carrier payment to brokers or applicable parties, when
-                  applicable; (9) interacting with all parties in a professional
-                  and courteous manner; (10) maintaining adequate insurance
-                  coverage and applicable licenses and bonds at all times; and
-                  (11) complying with all applicable laws, rules, and
+                  using LoadDispatch’s "Dispatched to Me" page to update
+                  shipment status; (4) handling vehicles so as to avoid any
+                  damage to the vehicles; (5) providing LoadDispatch with a copy
+                  of the bill of lading in the event of a dispute with a
+                  shipper; (6) providing appropriate parties with a completed
+                  and signed bill of lading/vehicle condition form upon delivery
+                  of the vehicles; (7) handling damage claims fairly and
+                  responsively; (8) promptly forwarding COD payments in excess
+                  of agreed upon carrier payment to brokers or applicable
+                  parties, when applicable; (9) interacting with all parties in
+                  a professional and courteous manner; (10) maintaining adequate
+                  insurance coverage and applicable licenses and bonds at all
+                  times; and (11) complying with all applicable laws, rules, and
                   regulations, including, but not limited to, regulations of the
                   Federal Motor Carrier Safety Administration (FMCSA).
                 </li>

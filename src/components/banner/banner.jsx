@@ -86,7 +86,7 @@ function Banner() {
                         "white-space": "nowrap",
                       }}
                     >
-                      LoadBoard
+                      LoadDispatch
                     </div>
 
                     <div

@@ -18,7 +18,7 @@ function About() {
               </div>
               <div class="panel-body">
                 <p>
-                  LoadBoard<sup>&reg;</sup> came online in 2021 as a way for
+                  LoadDispatch<sup>&reg;</sup> came online in 2021 as a way for
                   vehicle shippers to easily connect with car carriers. It has
                   since transformed the auto transport industry, taking it from
                   relying on paper, faxes, and phones, to utilizing an efficient
@@ -35,9 +35,9 @@ function About() {
                 <p>
                   Thousands of transport brokers, dealers, auctions,
                   manufacturers, and other industry professionals access
-                  LoadBoard
+                  LoadDispatch
                   <sup>&reg;</sup>
-                  on a daily basis to move vehicles of all types. LoadBoard
+                  on a daily basis to move vehicles of all types. LoadDispatch
                   <sup>&reg;</sup> has grown into the world's largest real-time
                   auto transport marketplace. It enables shippers across North
                   America to save time and money when transporting vehicles by
@@ -73,8 +73,8 @@ function About() {
               <div class="panel-body">
                 <ul class="list-unstyled">
                   <li>
-                    Use LoadBoard<sup>&reg;</sup> for <strong>30-days</strong>{" "}
-                    at no-charge*.
+                    Use LoadDispatch<sup>&reg;</sup> for{" "}
+                    <strong>30-days</strong> at no-charge*.
                   </li>
                   <li>
                     Plans start as low as
@@ -106,7 +106,7 @@ function About() {
                     no-charge!
                   </strong>{" "}
                   Car carriers, brokers, dealers, auto auctions, manufacturers
-                  and rental agencies can apply for a LoadBoard
+                  and rental agencies can apply for a LoadDispatch
                   <sup>&reg;</sup> username and password by going directly to
                   our
                   <a href="/signup/">

@@ -14,7 +14,7 @@ function Home() {
             <div class="col-sm-9 action-block">
               <h2 class="title">We connect Shippers to Carriers </h2>
               <h4 style={{ color: "#fff", paddingLeft: "10px" }}>
-                Use LoadBoard at no cost for 90 days
+                Use LoadDispatch at no cost for 90 days
               </h4>
             </div>
             <div class="col-sm-3 action-block text-right">

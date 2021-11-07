@@ -13,13 +13,13 @@ function Contact() {
         <div class="row">
           <div class="col-sm-8">
             <p class="lead">
-              Submit a question or comment to LoadBoard&reg; support.
+              Submit a question or comment to LoadDispatch&reg; support.
             </p>
           </div>
 
           <div class="col-sm-4">
             <address>
-              <strong>LoadBoard</strong>
+              <strong>LoadDispatch</strong>
               <br />
               26387 Network Place
               <br />
@@ -294,7 +294,7 @@ function Contact() {
                     Status of Application (3-5 business days to process)
                   </option>
                   <option value="billing">
-                    LoadBoard Billing + Billing Address Change
+                    LoadDispatch Billing + Billing Address Change
                   </option>
                   <option value="classifieds_and_resources">
                     Classifieds and Resources
@@ -308,10 +308,10 @@ function Contact() {
                   </option>
                   <option value="other">Other</option>
                   <option value="other_trouble">
-                    Other Trouble Using LoadBoard.com
+                    Other Trouble Using LoadDispatch.com
                   </option>
                   <option value="suggestions">
-                    Suggestions for LoadBoard.com
+                    Suggestions for LoadDispatch.com
                   </option>
                 </select>
                 <span

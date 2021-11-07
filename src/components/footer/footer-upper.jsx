@@ -96,7 +96,7 @@ function FooterUpper() {
             >
               <div class="visible-lg">
                 <p class="small message color-gray-medium">
-                  LoadBoard is the most cost-effective way to manage
+                  LoadDispatch is the most cost-effective way to manage
                   transportation on your own.
                 </p>
 

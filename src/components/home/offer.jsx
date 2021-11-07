@@ -23,10 +23,10 @@ function Offer() {
             </div>
             <div class="col-sm-4 offer-block">
               <div class="offer-icon">
-                <i class="icon-plane"></i>
+                <i class="ti-hand-open"></i>
               </div>
               <div class="offer-text">
-                <h4>air frieght</h4>
+                <h4>Safe Shipments</h4>
                 <p>
                   we help organize shipments for individuals or corporations to
                   get goods from the manufacturer or producer to a market..
@@ -52,8 +52,8 @@ function Offer() {
               <div class="offer-text">
                 <h4>warehousing service</h4>
                 <p>
-                  Integer adipiscing erat eget risus sollici pellentesque et non
-                  erata adipiscing erat eget risus sollici pellentes.
+                  Consumers want fast, low-cost delivery and the full
+                  availability of options with the use of warehouses.
                 </p>
               </div>
             </div>
@@ -64,8 +64,8 @@ function Offer() {
               <div class="offer-text">
                 <h4>lowest pricing</h4>
                 <p>
-                  Integer adipiscing erat eget risus sollici pellentesque et non
-                  erata adipiscing erat eget risus sollici pellentes.
+                  we offer reasonable and competitive price regimes for our
+                  services.
                 </p>
               </div>
             </div>
@@ -76,8 +76,8 @@ function Offer() {
               <div class="offer-text">
                 <h4>supply chain management </h4>
                 <p>
-                  Integer adipiscing erat eget risus sollici pellentesque et non
-                  erata adipiscing erat eget risus sollici pellentes.
+                  Our integrated end to end supply chain system is all you need
+                  to get that product to its consumers.
                 </p>
               </div>
             </div>

@@ -35,15 +35,15 @@ function Register() {
             <div class="col-sm-12 history-block">
               <h2>Sign Up Now</h2>
               <p>
-                New users can enjoy LoadBoard for 90-days at no-charge. After
-                that, you hereby authorize LoadBoard to charge you automatically
-                every month until you cancel your subscription. After your
-                application is accepted, we will contact you with a password.
-                All fields marked with * are required..
+                New users can enjoy LoadDispatch for 90-days at no-charge. After
+                that, you hereby authorize LoadDispatch to charge you
+                automatically every month until you cancel your subscription.
+                After your application is accepted, we will contact you with a
+                password. All fields marked with * are required..
               </p>
 
               <p>
-                While LoadBoard® is not a shipping company, we connect you to
+                While LoadDispatch® is not a shipping company, we connect you to
                 over 13,000 carriers ready to transport your vehicle. In
                 addition, we provide access to U.S. DOT license information,
                 insurance information and ratings for carriers as well as an
@@ -60,8 +60,8 @@ function Register() {
               <h3>Pricing Information</h3>
               <ul>
                 <li>
-                  Use LoadBoard<sup>&reg;</sup> for <strong>90-days</strong> at
-                  no-charge.
+                  Use LoadDispatch<sup>&reg;</sup> for <strong>90-days</strong>{" "}
+                  at no-charge.
                 </li>
                 <li>
                   After 90-days, you can continue to use. Plans start as low as
