@@ -1,28 +1,104 @@
 import axios from "axios";
 import { useRef } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useSnackbar } from "notistack";
+import Select from "react-select";
+import countryList from "react-select-country-list";
+import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
+import { useStateMachine } from "little-state-machine";
+import csc from "country-state-city";
+
 import BreadCrumb from "../../components/banner/breadcrumb";
+import updateAction from "../../context/updateAction";
+//import BreadCrumb from "../../components/banner/breadcrumb";
 
 function Register() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
+  const [formStep, setFormStep] = useState(0);
+  const { actions, state } = useStateMachine({ updateAction });
+
+  const [country, setCountry] = useState("");
+  const [region, setRegion] = useState("");
+  const [value, setValue] = useState("");
   const history = useHistory();
 
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const usernameRef = useRef();
+  const countries = csc.getAllCountries();
+  console.log("countries:", countries);
+  const states = csc.getStatesOfCountry(country);
 
-  const handleStart = () => {
-    setEmail(emailRef.current.value);
+  const selectCountry = (val) => {
+    setCountry((country) => val);
+    console.log("Country:", country);
   };
-  const handleFinish = async (e) => {
-    e.preventDefault();
-    setPassword(passwordRef.current.value);
-    setUsername(usernameRef.current.value);
+
+  const selectRegion = (val) => {
+    setRegion((region) => val);
+    console.log("Region:", region);
+  };
+
+  useEffect(() => {}, []);
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+
+  const {
+    register: register2,
+    formState: { errors: errors2 },
+    handleSubmit: handleSubmit2,
+  } = useForm();
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  const completeFormStep = () => {
+    setFormStep((currentStep) => currentStep + 1);
+  };
+
+  // const emailRef = useRef();
+  // const passwordRef = useRef();
+  // const usernameRef = useRef();
+  // const companyRef = useRef();
+  // const rolesRef = useRef();
+  // const lastnameRef = useRef();
+
+  const rolesRef = useRef();
+  const CountryRef = useRef();
+  const RegionRef = useRef();
+
+  function onChange(event) {
+    setValue(event.target.value);
+    console.log("value:", value);
+  }
+
+  function ongetStates(event) {
+    console.log("value:", value);
+  }
+
+  // Messages
+  const required = "This field is required";
+  const maxLength = "Your input exceed maximum length";
+
+  // Error Component
+  const errorMessage = (error) => {
+    return <div className="invalid-feedback">{error}</div>;
+  };
+
+  const onSubmit = (data) => {
+    actions.updateAction(data);
+    completeFormStep();
+    // props.history.push("./step2");
+  };
+
+  const onFinish = async (data) => {
+    // e.preventDefault();
+    actions.updateAction(data);
+    // setPassword(passwordRef.current.value);
+    // setUsername(usernameRef.current.value);
     try {
-      await axios.post("auth/register", { email, username, password });
+      await axios.post("auth/register", data);
       history.push("/login");
     } catch (err) {}
   };
@@ -95,137 +171,279 @@ function Register() {
           <div></div>
           <div class="row">
             <div class="col-sm-12 about-block">
-              <h3>Create an Account here</h3>
+              <div className="col-sm-12">
+                {formStep === 0 && (
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <section id="Company">
+                      <h3>Tell us about your company</h3>
+                      <hr />
+                      <h4>
+                        You selected {value} - {country} - {region}
+                      </h4>
+                      <div className="form-group col-sm-4">
+                        <select
+                          name="CompanyType"
+                          class="form-control"
+                          id="CompanyType"
+                          {...register("CompanyType", {
+                            required: true,
+                          })}
+                          onChange={onChange}
+                        >
+                          <option value="">
+                            {" "}
+                            Please describe your business{" "}
+                          </option>
+                          <option value="carrier">Carrier </option>
+                          <option value="shipper">Auction</option>
+                          <option value="carrier">Corp. Relocation</option>
+                          <option value="broker">Broker</option>
+                          <option value="broker">Rental Agency</option>
+                          <option value="shipper">Salvage</option>
+                          <option value="broker">Dealer</option>
+                          <option value="shipper">Manufacturer</option>
+                          <option value="shipper">Import/Export</option>
+                        </select>
 
-              <form className="input">
-                <div class="row">
-                  <div class="col-sm-6 col-md-4">
-                    <div class="form-group has-feedback ">
-                      <label for="userTypes">
-                        Please describe your business
-                      </label>
-                      <select
-                        name="usertypes"
-                        class="form-control"
-                        required="required"
-                        id="userTypes"
-                      >
-                        <option></option>
-                        <option class="form-control carrierType">
-                          Carrier
-                        </option>
-                        <option class="form-control">Auction</option>
-                        <option class="form-control">Corp. Relocation</option>
-                        <option class="form-control brokerType">Broker</option>
-                        <option class="form-control dealerType">
-                          Rental Agency
-                        </option>
-                        <option class="form-control salvageType dealerType">
-                          Salvage
-                        </option>
-                        <option class="form-control dealerType">Dealer</option>
-                        <option class="form-control">Manufacturer</option>
-                        <option class="form-control importExportType">
-                          Import/Export
-                        </option>
-                      </select>
-                      <span
-                        class="glyphicon form-control-feedback"
-                        aria-hidden="true"
-                      ></span>
-                      <span class="help-block with-errors text-right"></span>
-                    </div>
-                  </div>
+                        {errors.Username &&
+                          errors.Username.type === "required" &&
+                          errorMessage(required)}
+                        <input
+                          id="Role"
+                          name="Role"
+                          type="hidden"
+                          value={value}
+                          // ref={rolesRef}
+                          {...register("Role")}
+                        />
+                      </div>
+                      <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="text"
+                          placeholder="Company Name"
+                          name="CompanyName"
+                          {...register("CompanyName", {
+                            required: true,
+                            maxLength: 50,
+                          })}
+                        />
+                        {errors.CompanyName &&
+                          errors.CompanyName.type === "required" &&
+                          errorMessage(required)}
+                        {errors.CompanyName &&
+                          errors.CompanyName.type === "maxLength" &&
+                          errorMessage(maxLength)}
+                      </div>
 
-                  <div class="col-sm-6 col-md-4">
-                    <div class="form-group has-feedback ">
-                      <label for="txtCompanyName">Company Name</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="companyname"
-                        id="txtCompanyName"
-                        maxlength="60"
-                        required="required"
-                        pattern="[\w\s]+"
-                        value=""
-                        data-error="Must not contain special characters."
-                      />
-                      <span
-                        class="glyphicon form-control-feedback"
-                        aria-hidden="true"
-                      ></span>
-                      <span class="help-block with-errors text-right small"></span>
-                    </div>
+                      <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="text"
+                          placeholder="Company Address"
+                          name="Address"
+                          {...register("Address", {
+                            required: true,
+                          })}
+                        />
+                        {errors.Address &&
+                          errors.Address.type === "required" &&
+                          errorMessage(required)}
+                      </div>
+                      <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="text"
+                          placeholder="Company Email"
+                          name="ContactEmail"
+                          {...register("ContactEmail", {
+                            required: true,
+                            pattern: /^\S+@\S+$/i,
+                          })}
+                        />
+                        {errors.ContactEmail &&
+                          errors.ContactEmail.type === "required" &&
+                          errorMessage(required)}
+                      </div>
+                      <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="text"
+                          placeholder="Contact Phone"
+                          name="ContactPhone"
+                          {...register("ContactPhone", {
+                            required: true,
+                          })}
+                        />
+                        {errors.ContactPhone &&
+                          errors.ContactPhone.type === "required" &&
+                          errorMessage(required)}
+                      </div>
+                      <div className="form-group col-sm-4">
+                        {/* <select
+                          name="Country"
+                          class="form-control"
+                          id="Country"
+                          {...register("Country", {
+                            required: true,
+                          })}
+                          onChange={selectCountry}
+                        >
+                          <option value=""> Select Country </option>
+                          {countries.map((item) => (
+                            <option key={item.isoCode} value={item.isoCode}>
+                              {item.name}
+                            </option>
+                          ))}
+                        </select>
 
-                    <div class="form-group has-feedback " id="userNameGroup">
-                      <label for="txtUserName">Username</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="username"
-                        id="txtUserName"
-                        data-minlength="6"
-                        maxlength="8"
-                        required="required"
-                        pattern="[a-z0-9]+"
-                        data-error="Must be between 6 and 8 characters long, all lowercase, and contain no special characters."
-                        value=""
-                      />
-                      <span
-                        class="glyphicon form-control-feedback"
-                        aria-hidden="true"
-                      ></span>
-                      <span class="help-block with-errors text-right small"></span>
-                    </div>
-                  </div>
+                        {errors.Country &&
+                          errors.Country.type === "required" &&
+                          errorMessage(required)} */}
 
-                  <div class="col-sm-6 col-md-4">
-                    <div class="form-group has-feedback ">
-                      <label for="txtEmail">Email</label>
-                      <input
-                        type="text"
-                        class="form-control email"
-                        name="email"
-                        id="txtEmail"
-                        maxlength="50"
-                        required="required"
-                        value=""
-                      />
-                      <span
-                        class="glyphicon form-control-feedback"
-                        aria-hidden="true"
-                      ></span>
-                      <span class="help-block with-errors text-right small"></span>
-                    </div>
+                        {/* <CountryDropdown
+                          value={country}
+                          classes="form-control"
+                          name="CountryDDL"
+                          onChange={(val) => selectCountry(val)}
+                        /> */}
 
-                    <div class="form-group has-feedback ">
-                      <label for="txtEmailConfirm">Confirm Email</label>
-                      <input
-                        type="text"
-                        class="form-control email"
-                        id="txtEmailConfirm"
-                        maxlength="50"
-                        required="required"
-                        data-match="#txtEmail"
-                        value=""
-                        data-error="Email does not match"
-                      />
-                      <span
-                        class="glyphicon form-control-feedback"
-                        aria-hidden="true"
-                      ></span>
-                      <span class="help-block with-errors text-right small"></span>
-                    </div>
-                  </div>
-                  <button
-                    className="sppb-btn sppb-btn-default sppb-btn-"
-                    onClick={handleFinish}
-                  >
-                    Start
-                  </button>
-                </div>
-              </form>
+                        <input
+                          name="Country"
+                          type="text"
+                          defaultValue={country}
+                          // value={country}
+                          //  ref={CountryRef}
+                          {...register("Country")}
+                        />
+                      </div>
+
+                      <div className="form-group col-sm-4">
+                        {/* <select
+                          name="Region"
+                          class="form-control"
+                          id="Region"
+                          {...register("Region", {
+                            required: true,
+                          })}
+                        >
+                          <option value=""> Select Country </option>
+                          {states.map((item) => (
+                            <option key={item.isoCode} value={item.isoCode}>
+                              {item.name}
+                            </option>
+                          ))}
+                        </select> */}
+                        {/* <RegionDropdown
+                          value={region}
+                          country={country}
+                          classes="form-control"
+                          name="RegionDDl"
+                          onChange={(val) => selectRegion(val)}
+                        /> */}
+
+                        <input
+                          name="Region"
+                          type="text"
+                          defaultValue={region}
+                          //  ref={RegionRef}
+                          {...register("Region")}
+                        />
+                      </div>
+
+                      <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="url"
+                          placeholder="Website"
+                          name="Website"
+                          {...register("Website")}
+                        />
+                      </div>
+                      <div className="col-sm-12">
+                        <div className="form-group row.center ">
+                          <input
+                            className="btn btn-primary  "
+                            type="submit"
+                            value="Continue"
+                          />
+                        </div>
+                      </div>
+                    </section>
+                  </form>
+                )}
+
+                {formStep === 1 && (
+                  <form onSubmit={handleSubmit2(onFinish)}>
+                    <section id="Personal">
+                      <h3>Contact Information</h3>
+                      <hr />
+                      <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="text"
+                          placeholder="Full Name"
+                          name="FullName"
+                          {...register2("FullName", {
+                            required: true,
+                          })}
+                        />
+                        {errors.Name &&
+                          errors.Name.type === "required" &&
+                          errorMessage(required)}
+                        {errors.Name &&
+                          errors.Name.type === "maxLength" &&
+                          errorMessage(maxLength)}
+                      </div>
+                      <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="tel"
+                          placeholder="Mobile number"
+                          name="Phone"
+                          {...register2("Phone", { maxLength: 12 })}
+                        />
+                        {errors.MobileNumber &&
+                          errors.MobileNumber.type === "maxLength" &&
+                          errorMessage(maxLength)}
+                      </div>
+                      <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="email"
+                          placeholder="Email"
+                          name="Email"
+                          {...register2("Email", {
+                            required: true,
+                            pattern: /^\S+@\S+$/i,
+                          })}
+                        />
+                        {errors.Email &&
+                          errors.Email.type === "required" &&
+                          errorMessage(required)}
+                      </div>
+
+                      {/* <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="datetime"
+
+                          placeholder="Date of Birth"
+                          name="DateofBirth"
+                          {...register("DateofBirth", {
+                            pattern:
+                              /(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d/i,
+                          })}
+                        />
+                        {errors.DateofBirth &&
+                          errorMessage(
+                            "Please use the following format MM/DD/YYYY"
+                          )}
+                      </div> */}
+                    </section>
+                  </form>
+                )}
+              </div>
             </div>
           </div>
         </div>

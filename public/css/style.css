@@ -117,6 +117,9 @@ h3 {
 .row {
   clear: both;
 }
+.row.center {
+  justify-content: right;
+}
 
 .bg-color {
   background-color: #fdfcfc;

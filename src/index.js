@@ -1,14 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import { SnackbarProvider } from "notistack";
+import { StateMachineProvider, createStore } from "little-state-machine";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
 
+createStore({});
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <StateMachineProvider>
+      <SnackbarProvider maxSnack={3}>
+        <App />
+      </SnackbarProvider>
+    </StateMachineProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
