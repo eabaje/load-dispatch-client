@@ -6,7 +6,22 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-createStore({});
+createStore({
+  companyUser: {
+    CompanyName: "",
+    ContactEmail: "",
+    ContactPhone: "",
+    CompanyAddress: "",
+    Country: "",
+    Region: "",
+    CompanyType: "",
+    FullName: "",
+    Address: "",
+    Email: "",
+    Phone: "",
+    Website: "",
+  },
+});
 ReactDOM.render(
   <React.StrictMode>
     <StateMachineProvider>

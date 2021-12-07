@@ -1,43 +1,63 @@
 import axios from "axios";
 import { useRef } from "react";
 import { useState, useEffect } from "react";
+import { useSnackbar } from "notistack";
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useSnackbar } from "notistack";
-import Select from "react-select";
-import countryList from "react-select-country-list";
-import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
+import { yupResolver } from "@hookform/resolvers/yup";
+//import { yupResolver } from 'react-hook-form-resolvers';
+import * as Yup from "yup";
+
 import { useStateMachine } from "little-state-machine";
-import csc from "country-state-city";
+import { Country, State } from "country-state-city";
 
 import BreadCrumb from "../../components/banner/breadcrumb";
 import updateAction from "../../context/updateAction";
-//import BreadCrumb from "../../components/banner/breadcrumb";
+import { API_URL } from "../../constants";
+import { getError } from "../../utils/error";
 
 function Register() {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
   const [formStep, setFormStep] = useState(0);
   const { actions, state } = useStateMachine({ updateAction });
 
   const [country, setCountry] = useState("");
-  const [region, setRegion] = useState("");
+  const [countries, setCountries] = useState([]);
+  const [region, setRegion] = useState([]);
   const [value, setValue] = useState("");
   const history = useHistory();
 
-  const countries = csc.getAllCountries();
-  console.log("countries:", countries);
-  const states = csc.getStatesOfCountry(country);
+  const validationSchema = Yup.object().shape({
+    FullName: Yup.string().required("Fullname is required"),
+    Phone: Yup.string()
+      .required("Phone is required")
+      .min(6, "Email must be at least 6 characters")
+      .max(20, "Email must not exceed 20 characters"),
+    Email: Yup.string().required("Email is required").email("Email is invalid"),
+    Password: Yup.string()
+      .required("Password is required")
+      .min(6, "Password must be at least 6 characters")
+      .max(40, "Password must not exceed 40 characters"),
+    ConfirmPassword: Yup.string()
+      .required("Confirm Password is required")
+      .oneOf([Yup.ref("Password"), null], "Confirm Password does not match"),
+    acceptTerms: Yup.bool().oneOf([true], "Accept Terms is required"),
+  });
 
-  const selectCountry = (val) => {
-    setCountry((country) => val);
-    console.log("Country:", country);
+  useEffect(() => {
+    setCountries((countries) => (countries = Country.getAllCountries()));
+  }, []);
+
+  const selectCountry = async (e) => {
+    setCountry((country) => e.target.value);
+
+    setRegion(
+      (region) =>
+        // (region = JSON.stringify(State.getStatesOfCountry(e.target.value)))
+        (region = State.getStatesOfCountry(e.target.value))
+    );
   };
-
-  const selectRegion = (val) => {
-    setRegion((region) => val);
-    console.log("Region:", region);
-  };
-
-  useEffect(() => {}, []);
 
   const {
     register,
@@ -49,32 +69,24 @@ function Register() {
     register: register2,
     formState: { errors: errors2 },
     handleSubmit: handleSubmit2,
-  } = useForm();
+    watch,
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
 
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const password = useRef({});
+  password.current = watch("password", "");
 
   const completeFormStep = () => {
     setFormStep((currentStep) => currentStep + 1);
   };
-
-  // const emailRef = useRef();
-  // const passwordRef = useRef();
-  // const usernameRef = useRef();
-  // const companyRef = useRef();
-  // const rolesRef = useRef();
-  // const lastnameRef = useRef();
-
-  const rolesRef = useRef();
-  const CountryRef = useRef();
-  const RegionRef = useRef();
+  const goBack = () => {
+    setFormStep((currentStep) => currentStep - 1);
+  };
 
   function onChange(event) {
     setValue(event.target.value);
-    console.log("value:", value);
-  }
-
-  function ongetStates(event) {
-    console.log("value:", value);
+    // console.log("value:", value);
   }
 
   // Messages
@@ -83,7 +95,11 @@ function Register() {
 
   // Error Component
   const errorMessage = (error) => {
-    return <div className="invalid-feedback">{error}</div>;
+    return (
+      <p class="invalid-feedback" style={{ color: "red" }}>
+        {error}
+      </p>
+    );
   };
 
   const onSubmit = (data) => {
@@ -97,10 +113,14 @@ function Register() {
     actions.updateAction(data);
     // setPassword(passwordRef.current.value);
     // setUsername(usernameRef.current.value);
+    // console.log("State:", state.companyUser);
+
     try {
-      await axios.post("auth/register", data);
+      await axios.post(`${API_URL}auth/signup`, state.companyUser);
       history.push("/login");
-    } catch (err) {}
+    } catch (err) {
+      enqueueSnackbar(getError(err), { variant: "error" });
+    }
   };
   return (
     <div>
@@ -177,16 +197,14 @@ function Register() {
                     <section id="Company">
                       <h3>Tell us about your company</h3>
                       <hr />
-                      <h4>
-                        You selected {value} - {country} - {region}
-                      </h4>
+
                       <div className="form-group col-sm-4">
                         <select
                           name="CompanyType"
                           class="form-control"
                           id="CompanyType"
                           {...register("CompanyType", {
-                            required: true,
+                            required: "Please describe your business",
                           })}
                           onChange={onChange}
                         >
@@ -205,8 +223,8 @@ function Register() {
                           <option value="shipper">Import/Export</option>
                         </select>
 
-                        {errors.Username &&
-                          errors.Username.type === "required" &&
+                        {errors.CompanyType &&
+                          errors.CompanyType.type === "required" &&
                           errorMessage(required)}
                         <input
                           id="Role"
@@ -241,13 +259,13 @@ function Register() {
                           className="form-control"
                           type="text"
                           placeholder="Company Address"
-                          name="Address"
-                          {...register("Address", {
+                          name="CompanyAddress"
+                          {...register("CompanyAddress", {
                             required: true,
                           })}
                         />
-                        {errors.Address &&
-                          errors.Address.type === "required" &&
+                        {errors.CompanyAddress &&
+                          errors.CompanyAddress.type === "required" &&
                           errorMessage(required)}
                       </div>
                       <div className="form-group col-sm-4">
@@ -280,16 +298,15 @@ function Register() {
                           errorMessage(required)}
                       </div>
                       <div className="form-group col-sm-4">
-                        {/* <select
+                        <select
                           name="Country"
                           class="form-control"
-                          id="Country"
                           {...register("Country", {
-                            required: true,
+                            required: "Select Country",
                           })}
                           onChange={selectCountry}
                         >
-                          <option value=""> Select Country </option>
+                          <option value="">Select Country</option>
                           {countries.map((item) => (
                             <option key={item.isoCode} value={item.isoCode}>
                               {item.name}
@@ -299,27 +316,11 @@ function Register() {
 
                         {errors.Country &&
                           errors.Country.type === "required" &&
-                          errorMessage(required)} */}
-
-                        {/* <CountryDropdown
-                          value={country}
-                          classes="form-control"
-                          name="CountryDDL"
-                          onChange={(val) => selectCountry(val)}
-                        /> */}
-
-                        <input
-                          name="Country"
-                          type="text"
-                          defaultValue={country}
-                          // value={country}
-                          //  ref={CountryRef}
-                          {...register("Country")}
-                        />
+                          errorMessage(required)}
                       </div>
 
                       <div className="form-group col-sm-4">
-                        {/* <select
+                        <select
                           name="Region"
                           class="form-control"
                           id="Region"
@@ -327,28 +328,11 @@ function Register() {
                             required: true,
                           })}
                         >
-                          <option value=""> Select Country </option>
-                          {states.map((item) => (
-                            <option key={item.isoCode} value={item.isoCode}>
-                              {item.name}
-                            </option>
+                          <option value=""> Select Region/State </option>
+                          {region.map((item) => (
+                            <option value={item.isoCode}>{item.name}</option>
                           ))}
-                        </select> */}
-                        {/* <RegionDropdown
-                          value={region}
-                          country={country}
-                          classes="form-control"
-                          name="RegionDDl"
-                          onChange={(val) => selectRegion(val)}
-                        /> */}
-
-                        <input
-                          name="Region"
-                          type="text"
-                          defaultValue={region}
-                          //  ref={RegionRef}
-                          {...register("Region")}
-                        />
+                        </select>
                       </div>
 
                       <div className="form-group col-sm-4">
@@ -388,12 +372,7 @@ function Register() {
                             required: true,
                           })}
                         />
-                        {errors.Name &&
-                          errors.Name.type === "required" &&
-                          errorMessage(required)}
-                        {errors.Name &&
-                          errors.Name.type === "maxLength" &&
-                          errorMessage(maxLength)}
+                        {errorMessage(errors2.FullName?.message)}
                       </div>
                       <div className="form-group col-sm-4">
                         <input
@@ -401,11 +380,9 @@ function Register() {
                           type="tel"
                           placeholder="Mobile number"
                           name="Phone"
-                          {...register2("Phone", { maxLength: 12 })}
+                          {...register2("Phone")}
                         />
-                        {errors.MobileNumber &&
-                          errors.MobileNumber.type === "maxLength" &&
-                          errorMessage(maxLength)}
+                        {errorMessage(errors2.Phone?.message)}
                       </div>
                       <div className="form-group col-sm-4">
                         <input
@@ -418,11 +395,65 @@ function Register() {
                             pattern: /^\S+@\S+$/i,
                           })}
                         />
-                        {errors.Email &&
-                          errors.Email.type === "required" &&
-                          errorMessage(required)}
+                        {errorMessage(errors2.Email?.message)}
                       </div>
+                      <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="password"
+                          placeholder="Password"
+                          ref={password}
+                          name="Password"
+                          {...register2("Password")}
+                        />
+                        {errorMessage(errors2.Password?.message)}
+                      </div>
+                      <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="password"
+                          placeholder="Confirm Password"
+                          name="ConfirmPassword"
+                          {...register2("ConfirmPassword")}
+                        />
+                        {errorMessage(errors2.confirmPassword?.message)}
+                      </div>
+                      {/* onChange=
+                      {(e) => {
+                        const value = e.target.value;
+                        if (value !== password)
+                          return clearError("confirmPassword");
+                        setError(
+                          "confirmPassword",
+                          "notMatch",
+                          "passwords not mutch"
+                        );
+                      }} */}
+                      <div className="form-group col-sm-12">
+                        <textarea
+                          className="form-control"
+                          type="text"
+                          placeholder="Address"
+                          name="Address"
+                          {...register2("Address")}
+                        />
+                      </div>
+                      <div className="form-group col-sm-4 ">
+                        <label
+                          htmlFor="acceptTerms"
+                          className="form-check-label"
+                        >
+                          I have read and agree to the Terms
+                        </label>
+                        <input
+                          name="acceptTerms"
+                          type="checkbox"
+                          className="form-control"
+                          {...register("acceptTerms")}
+                        />
 
+                        {errorMessage(errors2.acceptTerms?.message)}
+                      </div>
                       {/* <div className="form-group col-sm-4">
                         <input
                           className="form-control"
@@ -440,6 +471,164 @@ function Register() {
                             "Please use the following format MM/DD/YYYY"
                           )}
                       </div> */}
+                      <div className="col-sm-12">
+                        <div className="form-group row.center ">
+                          <input
+                            className="btn btn-primary  "
+                            type="button"
+                            value="Back"
+                            onClick={goBack}
+                          />
+                          <input
+                            className="btn btn-primary  "
+                            type="submit"
+                            value="Finish"
+                          />{" "}
+                        </div>
+                      </div>
+                    </section>
+                  </form>
+                )}
+
+                {formStep === 2 && (
+                  <form onSubmit={handleSubmit2(onFinish)}>
+                    <section id="Subscription">
+                      <h3>Subscription Information</h3>
+                      <hr />
+
+                      <div class="col-md-6 col-xs-12">
+                        <h3>Important Notice!</h3>
+                        <p>
+                          Hello {state.companyUser.FullName}
+                          <a href="/contact">contact us</a>Thanks for your
+                          interest in our service.You have a so that we can
+                          verify your information and expedite your application.
+                        </p>
+                      </div>
+                      <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="text"
+                          placeholder="Full Name"
+                          name="FullName"
+                          {...register2("FullName", {
+                            required: true,
+                          })}
+                        />
+                        {errorMessage(errors2.FullName?.message)}
+                      </div>
+                      <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="tel"
+                          placeholder="Mobile number"
+                          name="Phone"
+                          {...register2("Phone")}
+                        />
+                        {errorMessage(errors2.Phone?.message)}
+                      </div>
+                      <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="email"
+                          placeholder="Email"
+                          name="Email"
+                          {...register2("Email", {
+                            required: true,
+                            pattern: /^\S+@\S+$/i,
+                          })}
+                        />
+                        {errorMessage(errors2.Email?.message)}
+                      </div>
+                      <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="password"
+                          placeholder="Password"
+                          ref={password}
+                          name="Password"
+                          {...register2("Password")}
+                        />
+                        {errorMessage(errors2.Password?.message)}
+                      </div>
+                      <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="password"
+                          placeholder="Confirm Password"
+                          name="ConfirmPassword"
+                          {...register2("ConfirmPassword")}
+                        />
+                        {errorMessage(errors2.confirmPassword?.message)}
+                      </div>
+                      {/* onChange=
+                      {(e) => {
+                        const value = e.target.value;
+                        if (value !== password)
+                          return clearError("confirmPassword");
+                        setError(
+                          "confirmPassword",
+                          "notMatch",
+                          "passwords not mutch"
+                        );
+                      }} */}
+                      <div className="form-group col-sm-12">
+                        <textarea
+                          className="form-control"
+                          type="text"
+                          placeholder="Address"
+                          name="Address"
+                          {...register2("Address")}
+                        />
+                      </div>
+                      <div className="form-group col-sm-4 ">
+                        <label
+                          htmlFor="acceptTerms"
+                          className="form-check-label"
+                        >
+                          I have read and agree to the Terms
+                        </label>
+                        <input
+                          name="acceptTerms"
+                          type="checkbox"
+                          className="form-control"
+                          {...register("acceptTerms")}
+                        />
+
+                        {errorMessage(errors2.acceptTerms?.message)}
+                      </div>
+                      {/* <div className="form-group col-sm-4">
+                        <input
+                          className="form-control"
+                          type="datetime"
+
+                          placeholder="Date of Birth"
+                          name="DateofBirth"
+                          {...register("DateofBirth", {
+                            pattern:
+                              /(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d/i,
+                          })}
+                        />
+                        {errors.DateofBirth &&
+                          errorMessage(
+                            "Please use the following format MM/DD/YYYY"
+                          )}
+                      </div> */}
+                      <div className="col-sm-12">
+                        <div className="form-group row.center ">
+                          <input
+                            className="btn btn-primary  "
+                            type="button"
+                            value="Back"
+                            onClick={goBack}
+                          />
+                          <input
+                            className="btn btn-primary  "
+                            type="submit"
+                            value="Finish"
+                          />{" "}
+                        </div>
+                      </div>
                     </section>
                   </form>
                 )}
