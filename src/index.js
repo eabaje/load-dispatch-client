@@ -20,6 +20,7 @@ createStore({
     Email: "",
     Phone: "",
     Website: "",
+    PaymentMethod: "",
   },
 });
 ReactDOM.render(

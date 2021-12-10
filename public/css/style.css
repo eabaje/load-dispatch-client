@@ -330,17 +330,18 @@ input[type="color"],
   padding: 6px 12px;
 }
 
-#contact-form .form-group input,
-#contact-form .form-group textarea {
+.contact-form .form-group input,
+.contact-form .form-group textarea {
   border-radius: 3px !important;
+  flex: 1;
+
   box-shadow: none;
 }
 
-input[type="radio"],
 .checkbox input[type="radio"],
 .checkbox input[type="checkbox"],
 input[type="checkbox"] {
-  display: none;
+  /* display: none; */
   margin-left: 0;
   margin-top: 3px;
   position: absolute;
@@ -2915,4 +2916,21 @@ fieldset[disabled] .btn-link:focus,
 fieldset[disabled] .btn-link:hover {
   color: #777;
   text-decoration: none;
+}
+/* p.invalid-feedback::before {
+  display: inline;
+  content: "⚠ ";
+} */
+
+.form {
+  max-width: 60rem;
+  margin: 0 auto;
+}
+.form > div {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+.form label {
+  margin: 1rem 0;
 }

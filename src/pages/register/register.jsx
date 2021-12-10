@@ -13,8 +13,10 @@ import { Country, State } from "country-state-city";
 
 import BreadCrumb from "../../components/banner/breadcrumb";
 import updateAction from "../../context/updateAction";
-import { API_URL } from "../../constants";
+import { API_URL, LOG_IN } from "../../constants";
 import { getError } from "../../utils/error";
+import "./register.css";
+import LoadingBox from "../../components/message/LoadingBox";
 
 function Register() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -26,6 +28,8 @@ function Register() {
   const [countries, setCountries] = useState([]);
   const [region, setRegion] = useState([]);
   const [value, setValue] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("PayPal");
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
 
   const validationSchema = Yup.object().shape({
@@ -42,7 +46,7 @@ function Register() {
     ConfirmPassword: Yup.string()
       .required("Confirm Password is required")
       .oneOf([Yup.ref("Password"), null], "Confirm Password does not match"),
-    acceptTerms: Yup.bool().oneOf([true], "Accept Terms is required"),
+    AcceptTerms: Yup.bool().oneOf([true], "Accept Terms is required"),
   });
 
   useEffect(() => {
@@ -62,18 +66,29 @@ function Register() {
   const {
     register,
     formState: { errors },
-    handleSubmit,
+    handleSubmit: handleCompany,
   } = useForm();
 
   const {
     register: register2,
     formState: { errors: errors2 },
-    handleSubmit: handleSubmit2,
+    handleSubmit: handlePersonal,
     watch,
   } = useForm({
     resolver: yupResolver(validationSchema),
   });
-
+  const {
+    register: register3,
+    formState: { errors: errors3 },
+    handleSubmit: handleSubscribe,
+  } = useForm();
+  const {
+    register: register4,
+    formState: { errors: errors4 },
+    handleSubmit: handleFinish,
+  } = useForm();
+  //{   resolver: yupResolver(validationSchema),
+  // }
   const password = useRef({});
   password.current = watch("password", "");
 
@@ -102,22 +117,46 @@ function Register() {
     );
   };
 
-  const onSubmit = (data) => {
+  const onSubmitCompany = (data) => {
     actions.updateAction(data);
     completeFormStep();
     // props.history.push("./step2");
   };
 
-  const onFinish = async (data) => {
+  const onSubmitPersonal = (data) => {
+    actions.updateAction(data);
+    completeFormStep();
+    // props.history.push("./step2");
+  };
+  const onSubmitSubscribe = async (data) => {
+    actions.updateAction(data);
+    state.companyUser.PaymentMethod = paymentMethod;
+
+    try {
+      const res = await axios.post(`${API_URL}auth/signup`, state.companyUser);
+      setLoading(!loading);
+      if (res) {
+        setLoading(!loading);
+        history.push(LOG_IN);
+      }
+    } catch (err) {
+      enqueueSnackbar(getError(err), { variant: "error" });
+    }
+    // props.history.push("./step2");
+  };
+  const onSubmitFinish = async (data) => {
     // e.preventDefault();
     actions.updateAction(data);
+    state.companyUser.PaymentMethod = paymentMethod;
     // setPassword(passwordRef.current.value);
     // setUsername(usernameRef.current.value);
     // console.log("State:", state.companyUser);
 
     try {
-      await axios.post(`${API_URL}auth/signup`, state.companyUser);
-      history.push("/login");
+      const res = await axios.post(`${API_URL}auth/signup`, state.companyUser);
+      if (res) {
+        history.push(LOG_IN);
+      }
     } catch (err) {
       enqueueSnackbar(getError(err), { variant: "error" });
     }
@@ -151,49 +190,52 @@ function Register() {
       </section>
       <section id="about" class="space bg-color">
         <div class="container">
-          <div class="row">
-            <div class="col-md-6 col-xs-12">
-              <h3>Pricing Information</h3>
-              <ul>
-                <li>
-                  Use LoadDispatch<sup>&reg;</sup> for <strong>90-days</strong>{" "}
-                  at no-charge.
-                </li>
-                <li>
-                  After 90-days, you can continue to use. Plans start as low as
-                  <strong>
-                    <span id="startingPrice">$89.95</span>/month
-                  </strong>{" "}
-                  plus tax for Shippers.
-                </li>
-                <li>
-                  Carriers can get premium access for{" "}
-                  <b>
-                    <span id="unlimitedPrice">$115.95</span>/month
-                  </b>{" "}
-                  plus tax.
-                </li>
-                <li>
-                  There is no obligation to continue membership and you will not
-                  be charged until you sign up.
-                </li>
-              </ul>
+          {formStep === 0 && (
+            <div class="row">
+              <div class="col-md-6 col-xs-12">
+                <h3>Pricing Information</h3>
+                <ul>
+                  <li>
+                    Use LoadDispatch<sup>&reg;</sup> for{" "}
+                    <strong>90-days</strong> at no-charge.
+                  </li>
+                  <li>
+                    After 90-days, you can continue to use. Plans start as low
+                    as
+                    <strong>
+                      <span id="startingPrice">$89.95</span>/month
+                    </strong>{" "}
+                    plus tax for Shippers.
+                  </li>
+                  <li>
+                    Carriers can get premium access for{" "}
+                    <b>
+                      <span id="unlimitedPrice">$115.95</span>/month
+                    </b>{" "}
+                    plus tax.
+                  </li>
+                  <li>
+                    There is no obligation to continue membership and you will
+                    not be charged until you sign up.
+                  </li>
+                </ul>
+              </div>
+              <div class="col-md-6 col-xs-12">
+                <h3>Important Notice!</h3>
+                <p>
+                  If you have previously had an account, please{" "}
+                  <a href="/contact-us">contact us</a> so that we can verify
+                  your information and expedite your application.
+                </p>
+              </div>
             </div>
-            <div class="col-md-6 col-xs-12">
-              <h3>Important Notice!</h3>
-              <p>
-                If you have previously had an account, please{" "}
-                <a href="/contact-us">contact us</a> so that we can verify your
-                information and expedite your application.
-              </p>
-            </div>
-          </div>
-          <div></div>
+          )}
+          {loading && <LoadingBox></LoadingBox>}
           <div class="row">
             <div class="col-sm-12 about-block">
               <div className="col-sm-12">
                 {formStep === 0 && (
-                  <form onSubmit={handleSubmit(onSubmit)}>
+                  <form onSubmit={handleCompany(onSubmitCompany)}>
                     <section id="Company">
                       <h3>Tell us about your company</h3>
                       <hr />
@@ -204,7 +246,7 @@ function Register() {
                           class="form-control"
                           id="CompanyType"
                           {...register("CompanyType", {
-                            required: "Please describe your business",
+                            required: "* Please describe your business",
                           })}
                           onChange={onChange}
                         >
@@ -239,7 +281,7 @@ function Register() {
                         <input
                           className="form-control"
                           type="text"
-                          placeholder="Company Name"
+                          placeholder="* Company Name"
                           name="CompanyName"
                           {...register("CompanyName", {
                             required: true,
@@ -272,7 +314,7 @@ function Register() {
                         <input
                           className="form-control"
                           type="text"
-                          placeholder="Company Email"
+                          placeholder="* Company Email"
                           name="ContactEmail"
                           {...register("ContactEmail", {
                             required: true,
@@ -287,7 +329,7 @@ function Register() {
                         <input
                           className="form-control"
                           type="text"
-                          placeholder="Contact Phone"
+                          placeholder="* Contact Phone"
                           name="ContactPhone"
                           {...register("ContactPhone", {
                             required: true,
@@ -358,27 +400,29 @@ function Register() {
                 )}
 
                 {formStep === 1 && (
-                  <form onSubmit={handleSubmit2(onFinish)}>
+                  <form onSubmit={handlePersonal(onSubmitPersonal)}>
                     <section id="Personal">
                       <h3>Contact Information</h3>
                       <hr />
                       <div className="form-group col-sm-4">
                         <input
-                          className="form-control"
+                          className={`form-control ${
+                            errors2.FullName ? "is-invalid" : ""
+                          }`}
                           type="text"
-                          placeholder="Full Name"
+                          placeholder="* Full Name"
                           name="FullName"
-                          {...register2("FullName", {
-                            required: true,
-                          })}
+                          {...register2("FullName")}
                         />
                         {errorMessage(errors2.FullName?.message)}
                       </div>
                       <div className="form-group col-sm-4">
                         <input
-                          className="form-control"
+                          className={`form-control ${
+                            errors2.Phone ? "is-invalid" : ""
+                          }`}
                           type="tel"
-                          placeholder="Mobile number"
+                          placeholder="* Mobile number"
                           name="Phone"
                           {...register2("Phone")}
                         />
@@ -386,23 +430,23 @@ function Register() {
                       </div>
                       <div className="form-group col-sm-4">
                         <input
-                          className="form-control"
+                          className={`form-control ${
+                            errors2.Email ? "is-invalid" : ""
+                          }`}
                           type="email"
-                          placeholder="Email"
+                          placeholder="* Email"
                           name="Email"
-                          {...register2("Email", {
-                            required: true,
-                            pattern: /^\S+@\S+$/i,
-                          })}
+                          {...register2("Email")}
                         />
                         {errorMessage(errors2.Email?.message)}
                       </div>
                       <div className="form-group col-sm-4">
                         <input
-                          className="form-control"
+                          className={`form-control ${
+                            errors2.Password ? "is-invalid" : ""
+                          }`}
                           type="password"
-                          placeholder="Password"
-                          ref={password}
+                          placeholder="* Password"
                           name="Password"
                           {...register2("Password")}
                         />
@@ -410,14 +454,17 @@ function Register() {
                       </div>
                       <div className="form-group col-sm-4">
                         <input
-                          className="form-control"
+                          className={`form-control ${
+                            errors2.ConfirmPassword ? "is-invalid" : ""
+                          }`}
                           type="password"
-                          placeholder="Confirm Password"
+                          placeholder="* Confirm Password"
                           name="ConfirmPassword"
                           {...register2("ConfirmPassword")}
                         />
                         {errorMessage(errors2.confirmPassword?.message)}
                       </div>
+
                       {/* onChange=
                       {(e) => {
                         const value = e.target.value;
@@ -438,21 +485,23 @@ function Register() {
                           {...register2("Address")}
                         />
                       </div>
-                      <div className="form-group col-sm-4 ">
+                      <div className="form-group col-sm-4 accept">
+                        <input
+                          name="AcceptTerms"
+                          type="checkbox"
+                          className={`form-check-input ${
+                            errors2.acceptTerms ? "is-invalid" : ""
+                          }`}
+                          style={{ paddingRight: "20px" }}
+                          {...register("AcceptTerms")}
+                        />{" "}
                         <label
                           htmlFor="acceptTerms"
                           className="form-check-label"
                         >
                           I have read and agree to the Terms
                         </label>
-                        <input
-                          name="acceptTerms"
-                          type="checkbox"
-                          className="form-control"
-                          {...register("acceptTerms")}
-                        />
-
-                        {errorMessage(errors2.acceptTerms?.message)}
+                        {errorMessage(errors2.AcceptTerms?.message)}
                       </div>
                       {/* <div className="form-group col-sm-4">
                         <input
@@ -471,18 +520,20 @@ function Register() {
                             "Please use the following format MM/DD/YYYY"
                           )}
                       </div> */}
-                      <div className="col-sm-12">
-                        <div className="form-group row.center ">
+                      <div class="row">
+                        <div className="col-sm-9">
                           <input
                             className="btn btn-primary  "
                             type="button"
                             value="Back"
                             onClick={goBack}
                           />
+                        </div>
+                        <div class="col-sm-3 action-block text-right ">
                           <input
                             className="btn btn-primary  "
                             type="submit"
-                            value="Finish"
+                            value="Continue"
                           />{" "}
                         </div>
                       </div>
@@ -491,143 +542,78 @@ function Register() {
                 )}
 
                 {formStep === 2 && (
-                  <form onSubmit={handleSubmit2(onFinish)}>
+                  <form onSubmit={handleSubscribe(onSubmitSubscribe)}>
                     <section id="Subscription">
-                      <h3>Subscription Information</h3>
+                      <div class="row">
+                        <div class="col-md-6 col-xs-6">
+                          <h3>Subscription Information</h3>
+                          <hr />
+                          <p>
+                            <b> Hello {state.companyUser.FullName}</b>
+                            <br />
+                            Thanks for your interest in our service.You have a 3
+                            month free subscription.
+                            <br />
+                            Kindly select preferred payment method to complete
+                            your subscription.{" "}
+                          </p>
+                        </div>
+                        <div class="col-md-6 col-xs-6 ">
+                          {" "}
+                          <div>
+                            <h3>Payment Method</h3>
+                          </div>
+                          <div className="payment">
+                            <label>PayStack</label>
+                            <input
+                              type="radio"
+                              id="paystack"
+                              value="paystack"
+                              name="paymentMethod"
+                              checked
+                              onChange={(e) => setPaymentMethod(e.target.value)}
+                            ></input>
+                          </div>
+                          <div className="payment">
+                            <label>Stripe</label>
+                            <input
+                              type="radio"
+                              id="stripe"
+                              value="Stripe"
+                              name="paymentMethod"
+                              onChange={(e) => setPaymentMethod(e.target.value)}
+                            ></input>
+                          </div>
+                          <div className="payment">
+                            <label>PayPal</label>
+                            <input
+                              type="radio"
+                              id="paypal"
+                              value="PayPal"
+                              name="paymentMethod"
+                              onChange={(e) => setPaymentMethod(e.target.value)}
+                            ></input>
+                          </div>
+                          <div></div>
+                        </div>
+                      </div>
+
                       <hr />
 
-                      <div class="col-md-6 col-xs-12">
-                        <h3>Important Notice!</h3>
-                        <p>
-                          Hello {state.companyUser.FullName}
-                          <a href="/contact">contact us</a>Thanks for your
-                          interest in our service.You have a so that we can
-                          verify your information and expedite your application.
-                        </p>
-                      </div>
-                      <div className="form-group col-sm-4">
+                      <div className="col-sm-6">
                         <input
-                          className="form-control"
-                          type="text"
-                          placeholder="Full Name"
-                          name="FullName"
-                          {...register2("FullName", {
-                            required: true,
-                          })}
+                          className="btn btn-primary  "
+                          type="button"
+                          value="Back"
+                          onClick={goBack}
                         />
-                        {errorMessage(errors2.FullName?.message)}
                       </div>
-                      <div className="form-group col-sm-4">
+                      <div class="col-sm-6 text-right ">
                         <input
-                          className="form-control"
-                          type="tel"
-                          placeholder="Mobile number"
-                          name="Phone"
-                          {...register2("Phone")}
-                        />
-                        {errorMessage(errors2.Phone?.message)}
-                      </div>
-                      <div className="form-group col-sm-4">
-                        <input
-                          className="form-control"
-                          type="email"
-                          placeholder="Email"
-                          name="Email"
-                          {...register2("Email", {
-                            required: true,
-                            pattern: /^\S+@\S+$/i,
-                          })}
-                        />
-                        {errorMessage(errors2.Email?.message)}
-                      </div>
-                      <div className="form-group col-sm-4">
-                        <input
-                          className="form-control"
-                          type="password"
-                          placeholder="Password"
-                          ref={password}
-                          name="Password"
-                          {...register2("Password")}
-                        />
-                        {errorMessage(errors2.Password?.message)}
-                      </div>
-                      <div className="form-group col-sm-4">
-                        <input
-                          className="form-control"
-                          type="password"
-                          placeholder="Confirm Password"
-                          name="ConfirmPassword"
-                          {...register2("ConfirmPassword")}
-                        />
-                        {errorMessage(errors2.confirmPassword?.message)}
-                      </div>
-                      {/* onChange=
-                      {(e) => {
-                        const value = e.target.value;
-                        if (value !== password)
-                          return clearError("confirmPassword");
-                        setError(
-                          "confirmPassword",
-                          "notMatch",
-                          "passwords not mutch"
-                        );
-                      }} */}
-                      <div className="form-group col-sm-12">
-                        <textarea
-                          className="form-control"
-                          type="text"
-                          placeholder="Address"
-                          name="Address"
-                          {...register2("Address")}
-                        />
-                      </div>
-                      <div className="form-group col-sm-4 ">
-                        <label
-                          htmlFor="acceptTerms"
-                          className="form-check-label"
-                        >
-                          I have read and agree to the Terms
-                        </label>
-                        <input
-                          name="acceptTerms"
-                          type="checkbox"
-                          className="form-control"
-                          {...register("acceptTerms")}
-                        />
-
-                        {errorMessage(errors2.acceptTerms?.message)}
-                      </div>
-                      {/* <div className="form-group col-sm-4">
-                        <input
-                          className="form-control"
-                          type="datetime"
-
-                          placeholder="Date of Birth"
-                          name="DateofBirth"
-                          {...register("DateofBirth", {
-                            pattern:
-                              /(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d/i,
-                          })}
-                        />
-                        {errors.DateofBirth &&
-                          errorMessage(
-                            "Please use the following format MM/DD/YYYY"
-                          )}
-                      </div> */}
-                      <div className="col-sm-12">
-                        <div className="form-group row.center ">
-                          <input
-                            className="btn btn-primary  "
-                            type="button"
-                            value="Back"
-                            onClick={goBack}
-                          />
-                          <input
-                            className="btn btn-primary  "
-                            type="submit"
-                            value="Finish"
-                          />{" "}
-                        </div>
+                          className="btn btn-primary  "
+                          type="submit"
+                          value="Finish"
+                        />{" "}
                       </div>
                     </section>
                   </form>
@@ -641,7 +627,7 @@ function Register() {
         <div class="container">
           <div class="row">
             <div class="col-sm-9 action-block">
-              <h2 class="title">do you need Carrier to lift your cargo?</h2>
+              <h2 class="title">do you need a Carrier to lift your cargo?</h2>
             </div>
             <div class="col-sm-3 action-block text-right ">
               <a

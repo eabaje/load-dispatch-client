@@ -1,0 +1,29 @@
+.payment {
+  display: block;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.payment label {
+  margin-right: 20px;
+}
+.payment input[type="radio"] {
+  margin-top: 10px;
+}
+
+.accept {
+  display: block;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.accept label {
+  margin-top: 2px;
+  margin-left: 20px;
+}
+
+.accept input[type="checkbox"] {
+  margin-top: 9px;
+  margin-right: 100px;
+}

@@ -21,14 +21,14 @@ function Contact() {
             <address>
               <strong>LoadDispatch</strong>
               <br />
-              26387 Network Place
+              52A Ikorodu Road Jibowu,Lagos.
               <br />
-              Chicago, IL 60673-1263
+              Nigeria
             </address>
 
             <p>
-              <a href="tel:8009287869">
-                <i class="fa fa-phone"></i> 800-928-7869
+              <a href="tel:">
+                <i class="fa fa-phone"></i>
               </a>
               <br />
             </p>
@@ -37,13 +37,7 @@ function Contact() {
 
         <hr />
 
-        <form
-          action="/contact-us/submit"
-          id="contact-form"
-          method="post"
-          enctype="x-www-form-urlencoded"
-          autocomplete="off"
-        >
+        <form action="/contact-us/submit" id="contact-form" method="post">
           <div class="row">
             <div class="col-sm-4">
               <div class="form-group has-feedback">
@@ -54,10 +48,10 @@ function Contact() {
                   type="text"
                   class="form-control"
                   name="username"
+                  required="required"
                   id="contact-username"
                   maxlength="64"
-                  value=""
-                />{" "}
+                />
                 <span
                   class="glyphicon form-control-feedback"
                   aria-hidden="true"
@@ -65,7 +59,7 @@ function Contact() {
                 <div class="help-block with-errors"></div>
               </div>
 
-              <div class="form-group has-feedback">
+              <div class="form-group ">
                 <label for="name">Full Name</label>
                 <input
                   type="text"
@@ -74,7 +68,6 @@ function Contact() {
                   name="name"
                   id="name"
                   maxlength="64"
-                  value=""
                 />
                 <span
                   class="glyphicon form-control-feedback"
@@ -89,10 +82,9 @@ function Contact() {
                   type="text"
                   class="form-control"
                   required="required"
-                  name="company_name"
-                  id="company_name"
+                  name="CompanyName"
+                  id="CompanyName"
                   maxlength="64"
-                  value=""
                 />
                 <span
                   class="glyphicon form-control-feedback"
@@ -108,10 +100,9 @@ function Contact() {
                 <input
                   type="text"
                   class="form-control email"
-                  name="email"
-                  id="email"
+                  name="Email"
+                  id="Email"
                   maxlength="50"
-                  value=""
                   data-phoneoremail="true"
                 />
                 <span
@@ -126,11 +117,10 @@ function Contact() {
                 <input
                   type="text"
                   class="form-control email"
-                  name="retype_email"
-                  id="retype_email"
+                  name="ConfirmEmail"
+                  id="ConfirmEmail"
                   maxlength="50"
-                  value=""
-                  data-match="#email"
+                  data-match="#Email"
                 />
                 <span
                   class="glyphicon form-control-feedback"
@@ -147,7 +137,6 @@ function Contact() {
                   name="phone"
                   id="phone"
                   maxlength="20"
-                  value=""
                   data-phoneoremail="true"
                 />
                 <span
@@ -182,8 +171,6 @@ function Contact() {
                   class="form-control"
                   id="City"
                   name="City"
-                  id="City"
-                  value=""
                   maxlength="50"
                   required="required"
                 />
