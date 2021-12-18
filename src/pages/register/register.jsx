@@ -137,7 +137,8 @@ function Register() {
       setLoading(!loading);
       if (res) {
         setLoading(!loading);
-        history.push(LOG_IN);
+        // history.push(LOG_IN);
+        window.location.href = LOG_IN;
       }
     } catch (err) {
       enqueueSnackbar(getError(err), { variant: "error" });
