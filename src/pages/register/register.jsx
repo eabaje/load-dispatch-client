@@ -570,7 +570,7 @@ function Register() {
                               type="radio"
                               id="paystack"
                               value="paystack"
-                              name="paymentMethod"
+                              name="rdlpaymentMethod"
                               checked
                               onChange={(e) => setPaymentMethod(e.target.value)}
                             ></input>
@@ -581,7 +581,7 @@ function Register() {
                               type="radio"
                               id="stripe"
                               value="Stripe"
-                              name="paymentMethod"
+                              name="rdlpaymentMethod"
                               onChange={(e) => setPaymentMethod(e.target.value)}
                             ></input>
                           </div>
@@ -591,7 +591,7 @@ function Register() {
                               type="radio"
                               id="paypal"
                               value="PayPal"
-                              name="paymentMethod"
+                              name="rdlpaymentMethod"
                               onChange={(e) => setPaymentMethod(e.target.value)}
                             ></input>
                           </div>

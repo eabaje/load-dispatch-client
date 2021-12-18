@@ -1,7 +1,30 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import BreadCrumb from "../../components/banner/breadcrumb";
-
+import { useForm } from "react-hook-form";
+import { useStateMachine } from "little-state-machine";
+import { Country, State } from "country-state-city";
 function Contact() {
+
+  const [country, setCountry] = useState("");
+  const [countries, setCountries] = useState([]);
+  const [region, setRegion] = useState([]);
+  const { register, handleSubmit, errors } = useForm();
+  const onSubmit = values => console.log(values);
+
+  useEffect(() => {
+    setCountries((countries) => (countries = Country.getAllCountries()));
+  }, []);
+
+  const selectCountry = async (e) => {
+    setCountry((country) => e.target.value);
+
+    setRegion(
+      (region) =>
+        // (region = JSON.stringify(State.getStatesOfCountry(e.target.value)))
+        (region = State.getStatesOfCountry(e.target.value))
+    );
+  };
   return (
     <div>
       <BreadCrumb name="Contact Us" />
@@ -40,24 +63,7 @@ function Contact() {
         <form action="/contact-us/submit" id="contact-form" method="post">
           <div class="row">
             <div class="col-sm-4">
-              <div class="form-group has-feedback">
-                <label for="contact-username">
-                  Username (if you are a member)
-                </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="username"
-                  required="required"
-                  id="contact-username"
-                  maxlength="64"
-                />
-                <span
-                  class="glyphicon form-control-feedback"
-                  aria-hidden="true"
-                ></span>
-                <div class="help-block with-errors"></div>
-              </div>
+             
 
               <div class="form-group ">
                 <label for="name">Full Name</label>
@@ -104,7 +110,7 @@ function Contact() {
                   id="Email"
                   maxlength="50"
                   data-phoneoremail="true"
-                />
+                email/>
                 <span
                   class="glyphicon form-control-feedback"
                   aria-hidden="true"
@@ -112,22 +118,7 @@ function Contact() {
                 <div class="help-block with-errors"></div>
               </div>
 
-              <div class="form-group has-feedback">
-                <label for="retype_email">Retype Email</label>
-                <input
-                  type="text"
-                  class="form-control email"
-                  name="ConfirmEmail"
-                  id="ConfirmEmail"
-                  maxlength="50"
-                  data-match="#Email"
-                />
-                <span
-                  class="glyphicon form-control-feedback"
-                  aria-hidden="true"
-                ></span>
-                <div class="help-block with-errors"></div>
-              </div>
+             
 
               <div class="form-group has-feedback">
                 <label for="phone">Phone</label>
@@ -149,14 +140,22 @@ function Contact() {
 
             <div class="col-sm-4">
               <div class="form-group has-feedback">
-                <label for="timezone">Timezone</label>
-                <select id="timezone" name="timezone" class="form-control">
-                  <option value="">--Select One--</option>
-                  <option value="eastern">Eastern</option>
-                  <option value="central">Central</option>
-                  <option value="mountain">Mountain</option>
-                  <option value="pacific">Pacific</option>
-                </select>
+                <label for="timezone">Country</label>
+                <select
+                          name="Country"
+                          class="form-control"
+                          {...register("Country", {
+                            required: "Select Country",
+                          })}
+                          onChange={selectCountry}
+                       required >
+                          <option value="">Select Country</option>
+                          {countries.map((item) => (
+                            <option key={item.isoCode} value={item.isoCode}>
+                              {item.name}
+                            </option>
+                          ))}
+                        </select>
                 <span
                   class="glyphicon form-control-feedback"
                   aria-hidden="true"
@@ -164,97 +163,23 @@ function Contact() {
                 <div class="help-block with-errors"></div>
               </div>
 
-              <div class="form-group has-feedback">
-                <label for="City">City</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="City"
-                  name="City"
-                  maxlength="50"
-                  required="required"
-                />
-                <span
-                  class="glyphicon form-control-feedback"
-                  aria-hidden="true"
-                ></span>
-                <div class="help-block with-errors"></div>
-              </div>
+             
 
               <div class="form-group has-feedback">
                 <label for="State">State</label>
                 <select
-                  name="State"
-                  id="State"
-                  class="form-control"
-                  required="required"
-                >
-                  <option value="">--Select One--</option>
-                  <option value="AL">Alabama</option>
-                  <option value="AK">Alaska</option>
-                  <option value="AZ">Arizona</option>
-                  <option value="AR">Arkansas</option>
-                  <option value="CA">California</option>
-                  <option value="CO">Colorado</option>
-                  <option value="CT">Connecticut</option>
-                  <option value="DE">Delaware</option>
-                  <option value="FL">Florida</option>
-                  <option value="GA">Georgia</option>
-                  <option value="HI">Hawaii</option>
-                  <option value="ID">Idaho</option>
-                  <option value="IL">Illinois</option>
-                  <option value="IN">Indiana</option>
-                  <option value="IA">Iowa</option>
-                  <option value="KS">Kansas</option>
-                  <option value="KY">Kentucky</option>
-                  <option value="LA">Louisiana</option>
-                  <option value="ME">Maine</option>
-                  <option value="MD">Maryland</option>
-                  <option value="MA">Massachusetts</option>
-                  <option value="MI">Michigan</option>
-                  <option value="MN">Minnesota</option>
-                  <option value="MS">Mississippi</option>
-                  <option value="MO">Missouri</option>
-                  <option value="MT">Montana</option>
-                  <option value="NE">Nebraska</option>
-                  <option value="NV">Nevada</option>
-                  <option value="NH">New Hampshire</option>
-                  <option value="NJ">New Jersey</option>
-                  <option value="NM">New Mexico</option>
-                  <option value="NY">New York</option>
-                  <option value="NC">North Carolina</option>
-                  <option value="ND">North Dakota</option>
-                  <option value="OH">Ohio</option>
-                  <option value="OK">Oklahoma</option>
-                  <option value="OR">Oregon</option>
-                  <option value="PA">Pennsylvania</option>
-                  <option value="RI">Rhode Island</option>
-                  <option value="SC">South Carolina</option>
-                  <option value="SD">South Dakota</option>
-                  <option value="TN">Tennessee</option>
-                  <option value="TX">Texas</option>
-                  <option value="UT">Utah</option>
-                  <option value="VT">Vermont</option>
-                  <option value="VA">Virginia</option>
-                  <option value="WA">Washington</option>
-                  <option value="DC">Washington DC</option>
-                  <option value="WV">West Virginia</option>
-                  <option value="WI">Wisconsin</option>
-                  <option value="WY">Wyoming</option>
-                  <option value="AB">Canada-Alberta</option>
-                  <option value="BC">Canada-British Columbia</option>
-                  <option value="MB">Canada-Manitoba</option>
-                  <option value="NB">Canada-New Brunswick</option>
-                  <option value="NL">Canada-Newfoundland</option>
-                  <option value="NT">Canada-Northwest Territories</option>
-                  <option value="NS">Canada-Nova Scotia</option>
-                  <option value="NU">Canada-Nunavut</option>
-                  <option value="ON">Canada-Ontario</option>
-                  <option value="PE">Canada-Prince Edward Island</option>
-                  <option value="QC">Canada-Quebec</option>
-                  <option value="SK">Canada-Saskatchewan</option>
-                  <option value="YT">Canada-Yukon</option>
-                </select>
+                          name="Region"
+                          class="form-control"
+                          id="Region"
+                          {...register("Region", {
+                            required: true,
+                          })}
+                        >
+                          <option value=""> Select Region/State </option>
+                          {region.map((item) => (
+                            <option value={item.isoCode}>{item.name}</option>
+                          ))}
+                        </select>
                 <span
                   class="glyphicon form-control-feedback"
                   aria-hidden="true"
