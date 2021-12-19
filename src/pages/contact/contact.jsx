@@ -2,16 +2,23 @@ import React from "react";
 import { useState, useEffect } from "react";
 import BreadCrumb from "../../components/banner/breadcrumb";
 import { useForm } from "react-hook-form";
-import { useStateMachine } from "little-state-machine";
 import { Country, State } from "country-state-city";
+import { REACT_APP_EMAILJS_RECEIVER, REACT_APP_EMAILJS_SERVICEID, REACT_APP_EMAILJS_TEMPLATEID, REACT_APP_EMAILJS_USERID } from "../../constants";
 function Contact() {
 
   const [country, setCountry] = useState("");
+  const [loading, setLoading] =useState(false);
+  
   const [countries, setCountries] = useState([]);
   const [region, setRegion] = useState([]);
-  const { register, handleSubmit, errors } = useForm();
-  const onSubmit = values => console.log(values);
-
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+   const [formSubmitSuccessful, setFormSubmitSuccessful] = useState(false)
+ 
+  
   useEffect(() => {
     setCountries((countries) => (countries = Country.getAllCountries()));
   }, []);
@@ -25,6 +32,47 @@ function Contact() {
         (region = State.getStatesOfCountry(e.target.value))
     );
   };
+
+  
+  
+  
+  const onSubmitContactForm = (data,r) => {
+    alert(`Thank you for your message from ${data.FullName}`);
+    const templateId =REACT_APP_EMAILJS_TEMPLATEID;
+    const serviceID = REACT_APP_EMAILJS_SERVICEID;
+   const  message=`Company :${data.CompanyName} <br/>
+    Name:${data.FullName} <br/>
+    
+    Phone:${data.Phone} <br/>
+    
+    Email:${data.Email} <br/>
+    
+    Country:${data.Country} <br/>
+
+    Reason:${data.Reason} <br/>
+
+    Question/Feedback:${data.Question} <br/>
+
+    
+    
+    `;
+    sendFeedback(serviceID, templateId, { from_name: data.FullName, message_html: message, reply_to: REACT_APP_EMAILJS_RECEIVER })
+    r.target.reset();
+}
+
+
+  const sendFeedback = (serviceID, templateId, variables) => {
+    window.emailjs.send(
+        serviceID, templateId,
+        variables
+    ).then(res => {
+      if (res.status === 200) {
+        setFormSubmitSuccessful(true)
+      }
+        console.log('Email successfully sent!')
+    })
+        .catch(err => console.error('There has been an error.  Here some thoughts on the error that occured:', err))
+}
   return (
     <div>
       <BreadCrumb name="Contact Us" />
@@ -36,7 +84,13 @@ function Contact() {
         <div class="row">
           <div class="col-sm-8">
             <p class="lead">
-              Submit a question or comment to LoadDispatch&reg; support.
+            {  ( !formSubmitSuccessful)? (
+             <> Submit a question or comment to LoadDispatch&reg; support.</>
+
+              ):(
+                <h2>Thank You! Your submission was sent.</h2>
+
+              ) }
             </p>
           </div>
 
@@ -59,8 +113,10 @@ function Contact() {
         </div>
 
         <hr />
-
-        <form action="/contact-us/submit" id="contact-form" method="post">
+      {  ( !formSubmitSuccessful)&& (
+    
+ 
+        <form onSubmit={handleSubmit(onSubmitContactForm)}>
           <div class="row">
             <div class="col-sm-4">
              
@@ -70,11 +126,12 @@ function Contact() {
                 <input
                   type="text"
                   class="form-control"
-                  required="required"
-                  name="name"
-                  id="name"
-                  maxlength="64"
-                />
+                  name="FullName"
+                  id="FullName"
+                  maxlength="150"
+               required
+               
+               {...register("FullName")}/>
                 <span
                   class="glyphicon form-control-feedback"
                   aria-hidden="true"
@@ -91,6 +148,8 @@ function Contact() {
                   name="CompanyName"
                   id="CompanyName"
                   maxlength="64"
+                required 
+                {...register("CompanyName")}
                 />
                 <span
                   class="glyphicon form-control-feedback"
@@ -110,7 +169,9 @@ function Contact() {
                   id="Email"
                   maxlength="50"
                   data-phoneoremail="true"
-                email/>
+                email
+                {...register("Email")}
+                />
                 <span
                   class="glyphicon form-control-feedback"
                   aria-hidden="true"
@@ -125,11 +186,13 @@ function Contact() {
                 <input
                   type="text"
                   class="form-control"
-                  name="phone"
-                  id="phone"
+                  name="Phone"
+                  id="Phone"
                   maxlength="20"
                   data-phoneoremail="true"
-                />
+                 required
+                 {...register("Phone")}
+               />
                 <span
                   class="glyphicon form-control-feedback"
                   aria-hidden="true"
@@ -196,11 +259,11 @@ function Contact() {
               <div class="form-group has-feedback">
                 <label for="nature_of_question">Nature of Question</label>
                 <select
-                  id="nature_of_question"
-                  name="nature_of_question"
+                  id="NatureOfQuestion"
+                  name="NatureOfQuestion"
                   class="form-control"
                   required="required"
-                >
+                  {...register("NatureOfQuestion")}>
                   <option value="">--Select One--</option>
                   <option value="app_status">
                     Status of Application (3-5 business days to process)
@@ -234,135 +297,12 @@ function Contact() {
               </div>
             </div>
 
-            <div class="col-sm-4">
-              <div
-                class="form-group has-feedback jsRatingQuestion"
-                style={{ display: "none" }}
-              >
-                <label>
-                  <strong>Reason</strong>
-                </label>
-                <select
-                  id="reason"
-                  name="reason"
-                  class="form-control"
-                  required="required"
-                >
-                  <option data-company-required="0" value="">
-                    --Select One--
-                  </option>
-                  <option data-company-required="0" value="How to Submit">
-                    How to Submit
-                  </option>
-                  <option
-                    data-company-required="0"
-                    value="How to Dispute or Escalate"
-                  >
-                    How to Dispute or Escalate
-                  </option>
-                  <option
-                    data-company-required="1"
-                    value="Rating Status Update"
-                  >
-                    Rating Status Update
-                  </option>
-                  <option
-                    data-company-required="1"
-                    value="Determination or Decision"
-                  >
-                    Determination or Decision
-                  </option>
-                </select>
-                <span
-                  class="glyphicon form-control-feedback"
-                  aria-hidden="true"
-                ></span>
-                <div class="help-block with-errors"></div>
-              </div>
-            </div>
+           
 
-            <div class="col-sm-4">
-              <div
-                class="form-group has-feedback jsRatingQuestion rating-against-form-group"
-                style={{ display: "none" }}
-              >
-                <label for="rating_against">
-                  <span
-                    class="text-danger small"
-                    id="ratingAgainstRequiredIndicator"
-                    style={{ display: "none" }}
-                  >
-                    *{" "}
-                  </span>
-                  <strong>Rating Against</strong>
-                </label>
-                <div class="input-group" id="spLightbox">
-                  <div class="input-group-addon sp-lightbox">
-                    <span
-                      class="glyphicon glyphicon-search"
-                      aria-hidden="true"
-                    ></span>
-                  </div>
-                  <input
-                    type="text"
-                    class="form-control sp-lightbox"
-                    id="rating_against_visible"
-                    name="rating_against_visible"
-                    maxlength="64"
-                    value=""
-                    readonly
-                    data-ratingagainst="true"
-                  />
-                  <div
-                    class="input-group-addon"
-                    id="clearRatingAgainst"
-                    style={{ display: "none" }}
-                  >
-                    <span
-                      class="glyphicon glyphicon-remove"
-                      aria-hidden="true"
-                    ></span>
-                  </div>
-                </div>
-                <span
-                  class="glyphicon form-control-feedback"
-                  aria-hidden="true"
-                ></span>
-                <div class="help-block with-errors error-rating-against"></div>
-                <input type="hidden" id="againstId" name="againstId" value="" />
-                <input
-                  type="hidden"
-                  id="rating_against"
-                  name="rating_against"
-                  value=""
-                />
-              </div>
-            </div>
+           
           </div>
 
-          <div class="row">
-            <div class="col-sm-4">
-              <div
-                class="form-group has-feedback jsRatingQuestion"
-                style={{ display: "none" }}
-              >
-                <label for="order_id">Order ID</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="order_id"
-                  id="order_id"
-                  maxlength="20"
-                  value=""
-                />
-                <span
-                  class="glyphicon form-control-feedback"
-                  aria-hidden="true"
-                ></span>
-                <div class="help-block with-errors"></div>
-              </div>
-            </div>
-          </div>
+        
 
           <div class="form-group has-feedback">
             <label for="question">
@@ -371,11 +311,11 @@ function Contact() {
             <textarea
               rows="6"
               class="form-control"
-              name="question"
-              id="question"
+              name="Question"
+              id="Question"
               cols="40"
               required
-            ></textarea>
+              {...register("Question")} ></textarea>
             <span
               class="glyphicon form-control-feedback"
               aria-hidden="true"
@@ -389,15 +329,17 @@ function Contact() {
             name="submit"
             id="jsSubmitContactUs"
             value="Send Question or Comment"
-          />
-          <input
-            type="hidden"
-            id="CSRFToken"
-            name="CSRFToken"
-            value="49ec8e6ac446c5f187ed8a9525b9a313798bfafd880fd403f8737c9a7488633e"
-          />
+            disabled={loading}
+            
+            {loading && (
+              <i
+                className="fa fa-refresh fa-spin"
+                style={{ marginRight: "5px" }}
+              />
+            )} />
+         
         </form>
-
+      ) }
         <hr />
 
         <div class="modal fade" id="company-search" style={{ display: "none" }}>
