@@ -28,7 +28,7 @@ function Register() {
   const [countries, setCountries] = useState([]);
   const [region, setRegion] = useState([]);
   const [value, setValue] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("PayPal");
+  const [paymentMethod, setPaymentMethod] = useState("Paystack");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
@@ -463,7 +463,7 @@ function Register() {
                           name="ConfirmPassword"
                           {...register2("ConfirmPassword")}
                         />
-                        {errorMessage(errors2.confirmPassword?.message)}
+                        {errorMessage(errors2.ConfirmPassword?.message)}
                       </div>
 
                       {/* onChange=
@@ -491,11 +491,11 @@ function Register() {
                           name="AcceptTerms"
                           type="checkbox"
                           className={`form-check-input ${
-                            errors2.acceptTerms ? "is-invalid" : ""
+                            errors2.AcceptTerms ? "is-invalid" : ""
                           }`}
                           style={{ paddingRight: "20px" }}
-                          {...register("AcceptTerms")}
-                        />{" "}
+                          {...register2("AcceptTerms")}
+                        />
                         <label
                           htmlFor="acceptTerms"
                           className="form-check-label"
@@ -569,7 +569,7 @@ function Register() {
                             <input
                               type="radio"
                               id="paystack"
-                              value="paystack"
+                              value="PayStack"
                               name="rdlpaymentMethod"
                               checked
                               onChange={(e) => setPaymentMethod(e.target.value)}

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import BreadCrumb from "../../components/banner/breadcrumb";
 import { useForm } from "react-hook-form";
 import { Country, State } from "country-state-city";
-import { REACT_APP_EMAILJS_RECEIVER, REACT_APP_EMAILJS_SERVICEID, REACT_APP_EMAILJS_TEMPLATEID, REACT_APP_EMAILJS_USERID } from "../../constants";
+import { REACT_APP_EMAILJS_RECEIVER, REACT_APP_EMAILJS_SERVICEID, REACT_APP_EMAILJS_TEMPLATEID, REACT_APP_EMAILJS_TO_NAME, REACT_APP_EMAILJS_USERID } from "../../constants";
 function Contact() {
 
   const [country, setCountry] = useState("");
@@ -38,6 +38,7 @@ function Contact() {
   
   const onSubmitContactForm = (data,r) => {
     alert(`Thank you for your message from ${data.FullName}`);
+    setLoading(true);
     const templateId =REACT_APP_EMAILJS_TEMPLATEID;
     const serviceID = REACT_APP_EMAILJS_SERVICEID;
    const  message=`Company :${data.CompanyName} <br/>
@@ -56,7 +57,7 @@ function Contact() {
     
     
     `;
-    sendFeedback(serviceID, templateId, { from_name: data.FullName, message_html: message, reply_to: REACT_APP_EMAILJS_RECEIVER })
+    sendFeedback(serviceID, templateId, { from_name: data.FullName,to_name:REACT_APP_EMAILJS_TO_NAME, message_html: message, reply_to: REACT_APP_EMAILJS_RECEIVER })
     r.target.reset();
 }
 
@@ -67,6 +68,7 @@ function Contact() {
         variables
     ).then(res => {
       if (res.status === 200) {
+        setLoading(false);
         setFormSubmitSuccessful(true)
       }
         console.log('Email successfully sent!')
@@ -331,7 +333,7 @@ function Contact() {
             value="Send Question or Comment"
             disabled={loading}
             
-            {loading && (
+            {...loading && (
               <i
                 className="fa fa-refresh fa-spin"
                 style={{ marginRight: "5px" }}
