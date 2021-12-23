@@ -8,13 +8,16 @@ function TopHeaderBar() {
         <div class="row">
           <div id="sp-logo" class="col-sm-3 col-md-3">
             <a class="logo" href="/">
-              <h1>
+              <h5>
                 <img
                   class="sp-default-logo"
-                  src="images/logo-mid-prod-final.png"
+                  src="images/logo-small-prod.png"
                   alt="Load Dispatch"
                 />
-              </h1>
+                <br />
+                <br />
+                <b> Global Load Dispatch</b>
+              </h5>
             </a>
           </div>
           <div id="sp-top2" class="col-sm-9 col-md-9 hidden-xs">
