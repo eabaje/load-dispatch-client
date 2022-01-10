@@ -243,10 +243,10 @@ function Register() {
 
                       <div className="form-group col-sm-4">
                         <select
-                          name="CompanyType"
+                          name="RoleType"
                           class="form-control"
-                          id="CompanyType"
-                          {...register("CompanyType", {
+                          id="RoleType"
+                          {...register("RoleType", {
                             required: "* Please describe your business",
                           })}
                           onChange={onChange}
@@ -266,8 +266,8 @@ function Register() {
                           <option value="shipper">Import/Export</option>
                         </select>
 
-                        {errors.CompanyType &&
-                          errors.CompanyType.type === "required" &&
+                        {errors.RoleType &&
+                          errors.RoleType.type === "required" &&
                           errorMessage(required)}
                         <input
                           id="Role"
