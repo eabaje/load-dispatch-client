@@ -131,6 +131,7 @@ function Register() {
   const onSubmitSubscribe = async (data) => {
     actions.updateAction(data);
     state.companyUser.PaymentMethod = paymentMethod;
+    state.companyUser.CompanyType = data.RoleType;
 
     try {
       const res = await axios.post(`${API_URL}auth/signup`, state.companyUser);
@@ -610,11 +611,10 @@ function Register() {
                         />
                       </div>
                       <div class="col-sm-6 text-right ">
-                        <input
-                          className="btn btn-primary  "
-                          type="submit"
-                          value="Finish"
-                        />{" "}
+                        <button type="submit" class="btn  btn-primary">
+                          {loading && <i className="fa fa-spinner fa-spin"></i>}
+                          Submit
+                        </button>
                       </div>
                     </section>
                   </form>
