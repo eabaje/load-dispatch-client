@@ -131,38 +131,23 @@ function Register() {
   const onSubmitSubscribe = async (data) => {
     actions.updateAction(data);
     state.companyUser.PaymentMethod = paymentMethod;
-    state.companyUser.CompanyType = data.RoleType;
-
+   // state.companyUser.RoleType = data.RoleType;
+    setLoading(!loading);
     try {
       const res = await axios.post(`${API_URL}auth/signup`, state.companyUser);
-      setLoading(!loading);
+
       if (res) {
         setLoading(!loading);
         // history.push(LOG_IN);
         window.location.href = LOG_IN;
       }
     } catch (err) {
+      setLoading(!loading);
       enqueueSnackbar(getError(err), { variant: "error" });
     }
     // props.history.push("./step2");
   };
-  const onSubmitFinish = async (data) => {
-    // e.preventDefault();
-    actions.updateAction(data);
-    state.companyUser.PaymentMethod = paymentMethod;
-    // setPassword(passwordRef.current.value);
-    // setUsername(usernameRef.current.value);
-    // console.log("State:", state.companyUser);
 
-    try {
-      const res = await axios.post(`${API_URL}auth/signup`, state.companyUser);
-      if (res) {
-        history.push(LOG_IN);
-      }
-    } catch (err) {
-      enqueueSnackbar(getError(err), { variant: "error" });
-    }
-  };
   return (
     <div>
       <BreadCrumb name="Register" />
@@ -232,7 +217,7 @@ function Register() {
               </div>
             </div>
           )}
-          {loading && <LoadingBox></LoadingBox>}
+          {/* {loading && <LoadingBox/>} */}
           <div class="row">
             <div class="col-sm-12 about-block">
               <div className="col-sm-12">
@@ -611,10 +596,17 @@ function Register() {
                         />
                       </div>
                       <div class="col-sm-6 text-right ">
-                        <button type="submit" class="btn  btn-primary">
-                          {loading && <i className="fa fa-spinner fa-spin"></i>}
-                          Submit
-                        </button>
+                        {loading ? (
+                          <button type="submit" class="btn  btn-primary">
+                            {" "}
+                            <i className="fa fa-spinner fa-spin"></i>
+                            &nbsp; Processing...{" "}
+                          </button>
+                        ) : (
+                          <button type="submit" class="btn  btn-primary">
+                            Submit{" "}
+                          </button>
+                        )}
                       </div>
                     </section>
                   </form>
