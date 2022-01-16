@@ -15,6 +15,7 @@ createStore({
     Country: "",
     Region: "",
     CompanyType: "",
+    Specilaization: "",
     RoleType: "",
     FullName: "",
     Address: "",

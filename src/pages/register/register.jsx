@@ -101,7 +101,12 @@ function Register() {
 
   function onChange(event) {
     setValue(event.target.value);
-    // console.log("value:", value);
+    state.companyUser.Specilaization =
+      event.target.options[event.target.selectedIndex].text;
+    console.log(
+      "value:",
+      event.target.options[event.target.selectedIndex].text
+    );
   }
 
   // Messages
@@ -131,7 +136,8 @@ function Register() {
   const onSubmitSubscribe = async (data) => {
     actions.updateAction(data);
     state.companyUser.PaymentMethod = paymentMethod;
-   // state.companyUser.RoleType = data.RoleType;
+    state.companyUser.CompanyType = data.RoleType;
+
     setLoading(!loading);
     try {
       const res = await axios.post(`${API_URL}auth/signup`, state.companyUser);
