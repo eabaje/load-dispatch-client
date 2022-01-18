@@ -138,17 +138,19 @@ function Register() {
     state.companyUser.PaymentMethod = paymentMethod;
     state.companyUser.CompanyType = data.RoleType;
 
-    setLoading(!loading);
+    setLoading(true);
     try {
       const res = await axios.post(`${API_URL}auth/signup`, state.companyUser);
 
       if (res) {
-        setLoading(!loading);
+        setLoading(false);
         // history.push(LOG_IN);
-        window.location.href = LOG_IN;
+        window.open(LOG_IN, "_blank");
+      
+       // window.location.href = LOG_IN;
       }
     } catch (err) {
-      setLoading(!loading);
+      setLoading(false);
       enqueueSnackbar(getError(err), { variant: "error" });
     }
     // props.history.push("./step2");
