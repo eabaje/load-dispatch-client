@@ -102,7 +102,7 @@ function About() {
               <div class="panel-body">
                 <p>
                   <strong>
-                    Sign up today and use Central Dispatch for 30-days* at
+                    Sign up today and use Load Dispatch for 30-days* at
                     no-charge!
                   </strong>{" "}
                   Car carriers, brokers, dealers, auto auctions, manufacturers
