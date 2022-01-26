@@ -30,6 +30,7 @@ function Register() {
   const [value, setValue] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Paystack");
   const [loading, setLoading] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   const history = useHistory();
 
   const validationSchema = Yup.object().shape({
@@ -139,15 +140,17 @@ function Register() {
     state.companyUser.CompanyType = data.RoleType;
 
     setLoading(true);
+    setDisabled(true);
     try {
       const res = await axios.post(`${API_URL}auth/signup`, state.companyUser);
 
       if (res) {
         setLoading(false);
+        setDisabled(false);
         // history.push(LOG_IN);
         window.open(LOG_IN, "_blank");
-      
-       // window.location.href = LOG_IN;
+
+        // window.location.href = LOG_IN;
       }
     } catch (err) {
       setLoading(false);
@@ -605,13 +608,21 @@ function Register() {
                       </div>
                       <div class="col-sm-6 text-right ">
                         {loading ? (
-                          <button type="submit" class="btn  btn-primary">
+                          <button
+                            type="submit"
+                            class="btn  btn-primary"
+                            disabled={disabled}
+                          >
                             {" "}
                             <i className="fa fa-spinner fa-spin"></i>
                             &nbsp; Processing...{" "}
                           </button>
                         ) : (
-                          <button type="submit" class="btn  btn-primary">
+                          <button
+                            type="submit"
+                            class="btn  btn-primary"
+                            disabled={disabled}
+                          >
                             Submit{" "}
                           </button>
                         )}
