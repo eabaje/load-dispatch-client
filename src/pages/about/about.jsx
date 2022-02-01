@@ -109,7 +109,7 @@ function About() {
                   and rental agencies can apply for a LoadDispatch
                   <sup>&reg;</sup> username and password by going directly to
                   our
-                  <a href="/signup/">
+                  <a href="/register/">
                     <strong>sign up page</strong>
                   </a>
                   .
