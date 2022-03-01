@@ -23,6 +23,7 @@ createStore({
     Phone: "",
     Website: "",
     PaymentMethod: "",
+    Currency: "",
   },
 });
 ReactDOM.render(

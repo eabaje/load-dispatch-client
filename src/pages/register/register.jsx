@@ -29,6 +29,8 @@ function Register() {
   const [region, setRegion] = useState([]);
   const [value, setValue] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Paystack");
+  const [currency, setCurrency] = useState("NGN");
+
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const history = useHistory();
@@ -137,6 +139,7 @@ function Register() {
   const onSubmitSubscribe = async (data) => {
     actions.updateAction(data);
     state.companyUser.PaymentMethod = paymentMethod;
+    state.companyUser.Currency = currency;
     state.companyUser.CompanyType = data.RoleType;
 
     setLoading(true);
@@ -592,7 +595,26 @@ function Register() {
                               onChange={(e) => setPaymentMethod(e.target.value)}
                             ></input>
                           </div>
-                          <div></div>
+                          <div>
+                            <h3>Currency</h3>
+                            <label>NGN</label>{" "}
+                            <input
+                              type="radio"
+                              id="Currency"
+                              value="NGN"
+                              name="rdlCurrency"
+                              checked
+                              onChange={(e) => setCurrency(e.target.value)}
+                            ></input>
+                            <label>USD</label>{" "}
+                            <input
+                              type="radio"
+                              id="Currency"
+                              value="USD"
+                              name="rdlCurrency"
+                              onChange={(e) => setCurrency(e.target.value)}
+                            ></input>
+                          </div>
                         </div>
                       </div>
 
