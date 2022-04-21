@@ -552,7 +552,7 @@ function Register() {
                           <p>
                             <b> Hello {state.companyUser.FullName}</b>
                             <br />
-                            Thanks for your interest in our service.You have a 3
+                            Thanks for your interest in our service.You have a one
                             month free subscription.
                             <br />
                             Kindly select preferred payment method to complete
