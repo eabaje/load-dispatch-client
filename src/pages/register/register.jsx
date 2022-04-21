@@ -171,7 +171,7 @@ function Register() {
             <div class="col-sm-12 history-block">
               <h2>Sign Up Now</h2>
               <p>
-                New users can enjoy LoadDispatch for 90-days at no-charge. After
+                New users can enjoy LoadDispatch for 30-days at no-charge. After
                 that, you hereby authorize LoadDispatch to charge you
                 automatically every month until you cancel your subscription.
                 After your application is accepted, we will contact you with a
@@ -181,7 +181,7 @@ function Register() {
               <p>
                 While LoadDispatch® is not a shipping company, we connect you to
                 over 13,000 carriers ready to transport your vehicle. In
-                addition, we provide access to U.S. DOT license information,
+                addition, we provide access to Nigeria. DOT license information,
                 insurance information and ratings for carriers as well as an
                 online dispatching system to make dispatching faster and easier.
               </p>
@@ -198,20 +198,20 @@ function Register() {
                 <ul>
                   <li>
                     Use LoadDispatch<sup>&reg;</sup> for{" "}
-                    <strong>90-days</strong> at no-charge.
+                    <strong>30-days</strong> at no-charge.
                   </li>
                   <li>
-                    After 90-days, you can continue to use. Plans start as low
+                    After 30-days, you can continue to use. Plans start as low
                     as
                     <strong>
-                      <span id="startingPrice">$89.95</span>/month
+                      <span id="startingPrice">$79.95</span>/month
                     </strong>{" "}
                     plus tax for Shippers.
                   </li>
                   <li>
                     Carriers can get premium access for{" "}
                     <b>
-                      <span id="unlimitedPrice">$115.95</span>/month
+                      <span id="unlimitedPrice">$99.95</span>/month
                     </b>{" "}
                     plus tax.
                   </li>
@@ -661,7 +661,7 @@ function Register() {
         <div class="container">
           <div class="row">
             <div class="col-sm-9 action-block">
-              <h2 class="title">do you need a Carrier to lift your cargo?</h2>
+              <h2 class="title">Do you need a Carrier to lift your cargo?</h2>
             </div>
             <div class="col-sm-3 action-block text-right ">
               <a
