@@ -151,7 +151,9 @@ function Register() {
         setLoading(false);
         setDisabled(false);
         // history.push(LOG_IN);
+        completeFormStep();
         window.open(LOG_IN, "_blank");
+
 
         // window.location.href = LOG_IN;
       }
@@ -651,6 +653,39 @@ function Register() {
                       </div>
                     </section>
                   </form>
+                )}
+
+            {formStep === 3 && (
+                 
+                    <section id="Thanks">
+                      <div class="row">
+                        <div class="col-md-6 col-xs-6">
+                          <h3>You are done</h3>
+                          <hr />
+                          <p>
+                            <b> Hello {state.companyUser.FullName}</b>
+                            <br />
+                            Your Registration is completed.
+                            <br />
+                           if not redirected to your personal login restriceted area Kindly <a href={LOG_IN}>click</a> to access.
+                            
+                          </p>
+                        </div>
+                        <div class="col-md-6 col-xs-6 ">
+                          {" "}
+                      
+                      
+                          
+                        
+                         
+                        </div>
+                      </div>
+
+                      <hr />
+
+                     
+                    </section>
+               
                 )}
               </div>
             </div>
