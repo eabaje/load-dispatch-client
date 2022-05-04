@@ -252,7 +252,7 @@ function Register() {
                             required: "* Please describe your business",
                           })}
                           onChange={onChange}
-                        >
+                          required >
                           <option value="">
                             {" "}
                             Please describe your business{" "}
@@ -268,9 +268,7 @@ function Register() {
                           <option value="shipper">Import/Export</option>
                         </select>
 
-                        {errors.RoleType &&
-                          errors.RoleType.type === "required" &&
-                          errorMessage(required)}
+                       
                         <input
                           id="Role"
                           name="Role"
@@ -284,19 +282,14 @@ function Register() {
                         <input
                           className="form-control"
                           type="text"
-                          placeholder="* Company Name"
+                          placeholder="Company Name"
                           name="CompanyName"
                           {...register("CompanyName", {
-                            required: true,
-                            maxLength: 50,
+                            
+                            maxLength: 100,
                           })}
                         />
-                        {errors.CompanyName &&
-                          errors.CompanyName.type === "required" &&
-                          errorMessage(required)}
-                        {errors.CompanyName &&
-                          errors.CompanyName.type === "maxLength" &&
-                          errorMessage(maxLength)}
+                      
                       </div>
 
                       <div className="form-group col-sm-4">
@@ -305,42 +298,40 @@ function Register() {
                           type="text"
                           placeholder="Company Address"
                           name="CompanyAddress"
-                          {...register("CompanyAddress", {
-                            required: true,
-                          })}
+                          {...register("CompanyAddress")}
                         />
-                        {errors.CompanyAddress &&
-                          errors.CompanyAddress.type === "required" &&
-                          errorMessage(required)}
+                       
                       </div>
                       <div className="form-group col-sm-4">
                         <input
                           className="form-control"
                           type="text"
+                          placeholder="Contact Phone"
+                          name="ContactPhone"
+                          {...register("ContactPhone")}
+                        />
+                     
+                      </div>
+                      <div className="form-group col-sm-4">
+                        <input
+                          className="form-control email"
+                          type="email"
+                          required="required "
                           placeholder="* Company Email"
                           name="ContactEmail"
-                          {...register("ContactEmail", {
-                            required: true,
-                            pattern: /^\S+@\S+$/i,
-                          })}
+                          {...register("ContactEmail")}
                         />
-                        {errors.ContactEmail &&
-                          errors.ContactEmail.type === "required" &&
-                          errorMessage(required)}
+                       
                       </div>
+                     
                       <div className="form-group col-sm-4">
                         <input
                           className="form-control"
-                          type="text"
-                          placeholder="* Contact Phone"
-                          name="ContactPhone"
-                          {...register("ContactPhone", {
-                            required: true,
-                          })}
+                          type="url"
+                          placeholder="http://your domain name"
+                          name="Website"
+                          {...register("Website")}
                         />
-                        {errors.ContactPhone &&
-                          errors.ContactPhone.type === "required" &&
-                          errorMessage(required)}
                       </div>
                       <div className="form-group col-sm-4">
                         <select
@@ -359,9 +350,7 @@ function Register() {
                           ))}
                         </select>
 
-                        {errors.Country &&
-                          errors.Country.type === "required" &&
-                          errorMessage(required)}
+                      
                       </div>
 
                       <div className="form-group col-sm-4">
@@ -380,15 +369,7 @@ function Register() {
                         </select>
                       </div>
 
-                      <div className="form-group col-sm-4">
-                        <input
-                          className="form-control"
-                          type="url"
-                          placeholder="Website"
-                          name="Website"
-                          {...register("Website")}
-                        />
-                      </div>
+                  
                       <div className="col-sm-12">
                         <div className="form-group row.center ">
                           <input
@@ -414,10 +395,11 @@ function Register() {
                           }`}
                           type="text"
                           placeholder="* Full Name"
+                          required="required "
                           name="FullName"
                           {...register2("FullName")}
                         />
-                        {errorMessage(errors2.FullName?.message)}
+                      
                       </div>
                       <div className="form-group col-sm-4">
                         <input
@@ -426,10 +408,11 @@ function Register() {
                           }`}
                           type="tel"
                           placeholder="* Mobile number"
+                          required="required "
                           name="Phone"
                           {...register2("Phone")}
                         />
-                        {errorMessage(errors2.Phone?.message)}
+                    
                       </div>
                       <div className="form-group col-sm-4">
                         <input
@@ -437,11 +420,12 @@ function Register() {
                             errors2.Email ? "is-invalid" : ""
                           }`}
                           type="email"
+                          required="required "
                           placeholder="* Email"
                           name="Email"
                           {...register2("Email")}
                         />
-                        {errorMessage(errors2.Email?.message)}
+                     
                       </div>
                       <div className="form-group col-sm-4">
                         <input
@@ -453,7 +437,7 @@ function Register() {
                           name="Password"
                           {...register2("Password")}
                         />
-                        {errorMessage(errors2.Password?.message)}
+                      
                       </div>
                       <div className="form-group col-sm-4">
                         <input

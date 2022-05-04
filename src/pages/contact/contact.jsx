@@ -150,7 +150,7 @@ function Contact() {
                   name="CompanyName"
                   id="CompanyName"
                   maxlength="64"
-                required 
+                
                 {...register("CompanyName")}
                 />
                 <span
@@ -165,7 +165,8 @@ function Contact() {
               <div class="form-group has-feedback">
                 <label for="email">Email</label>
                 <input
-                  type="text"
+                  type="email"
+                  required="required "
                   class="form-control email"
                   name="Email"
                   id="Email"
