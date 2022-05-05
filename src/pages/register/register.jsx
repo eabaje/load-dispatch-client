@@ -153,8 +153,7 @@ function Register() {
         setDisabled(false);
         // history.push(LOG_IN);
         completeFormStep();
-        window.open(LOG_IN, "_blank");
-
+        //  window.open(LOG_IN, "_blank");
 
         // window.location.href = LOG_IN;
       }
@@ -253,7 +252,8 @@ function Register() {
                             required: "* Please describe your business",
                           })}
                           onChange={onChange}
-                          required >
+                          required="required"
+                        >
                           <option value="">
                             {" "}
                             Please describe your business{" "}
@@ -269,7 +269,6 @@ function Register() {
                           <option value="shipper">Import/Export</option>
                         </select>
 
-                       
                         <input
                           id="Role"
                           name="Role"
@@ -286,11 +285,9 @@ function Register() {
                           placeholder="Company Name"
                           name="CompanyName"
                           {...register("CompanyName", {
-                            
                             maxLength: 100,
                           })}
                         />
-                      
                       </div>
 
                       <div className="form-group col-sm-4">
@@ -301,7 +298,6 @@ function Register() {
                           name="CompanyAddress"
                           {...register("CompanyAddress")}
                         />
-                       
                       </div>
                       <div className="form-group col-sm-4">
                         <input
@@ -311,7 +307,6 @@ function Register() {
                           name="ContactPhone"
                           {...register("ContactPhone")}
                         />
-                     
                       </div>
                       <div className="form-group col-sm-4">
                         <input
@@ -322,9 +317,8 @@ function Register() {
                           name="ContactEmail"
                           {...register("ContactEmail")}
                         />
-                       
                       </div>
-                     
+
                       <div className="form-group col-sm-4">
                         <input
                           className="form-control"
@@ -350,8 +344,6 @@ function Register() {
                             </option>
                           ))}
                         </select>
-
-                      
                       </div>
 
                       <div className="form-group col-sm-4">
@@ -370,7 +362,6 @@ function Register() {
                         </select>
                       </div>
 
-                  
                       <div className="col-sm-12">
                         <div className="form-group row.center ">
                           <input
@@ -400,7 +391,6 @@ function Register() {
                           name="FullName"
                           {...register2("FullName")}
                         />
-                      
                       </div>
                       <div className="form-group col-sm-4">
                         <input
@@ -413,7 +403,6 @@ function Register() {
                           name="Phone"
                           {...register2("Phone")}
                         />
-                    
                       </div>
                       <div className="form-group col-sm-4">
                         <input
@@ -426,7 +415,6 @@ function Register() {
                           name="Email"
                           {...register2("Email")}
                         />
-                     
                       </div>
                       <div className="form-group col-sm-4">
                         <input
@@ -438,7 +426,6 @@ function Register() {
                           name="Password"
                           {...register2("Password")}
                         />
-                      
                       </div>
                       <div className="form-group col-sm-4">
                         <input
@@ -539,8 +526,8 @@ function Register() {
                           <p>
                             <b> Hello {state.companyUser.FullName}</b>
                             <br />
-                            Thanks for your interest in our service.You have a one
-                            month free subscription.
+                            Thanks for your interest in our service.You have a
+                            one month free subscription.
                             <br />
                             Kindly select preferred payment method to complete
                             your subscription.{" "}
@@ -640,37 +627,28 @@ function Register() {
                   </form>
                 )}
 
-            {formStep === 3 && (
-                 
-                    <section id="Thanks">
-                      <div class="row">
-                        <div class="col-md-6 col-xs-6">
-                          <h3>You are done</h3>
-                          <hr />
-                          <p>
+                {formStep === 3 && (
+                  <section id="Thanks">
+                    <div class="row">
+                      <div class="col-md-6 col-xs-6">
+                        <h3>You are done</h3>
+                        <hr />
+                        <p>
+                          <h4>
                             <b> Hello {state.companyUser.FullName}</b>
                             <br />
                             Your Registration is completed.
-                            <br />
-                           if not redirected to your personal login restriceted area Kindly <a href={LOG_IN}>click</a> to access.
-                            
-                          </p>
-                        </div>
-                        <div class="col-md-6 col-xs-6 ">
-                          {" "}
-                      
-                      
-                          
-                        
-                         
-                        </div>
+                          </h4>
+                          <br />
+                          if not redirected to your personal login restriceted
+                          area Kindly <a href={LOG_IN}>click</a> to access.
+                        </p>
                       </div>
+                      <div class="col-md-6 col-xs-6 "> </div>
+                    </div>
 
-                      <hr />
-
-                     
-                    </section>
-               
+                    <hr />
+                  </section>
                 )}
               </div>
             </div>
