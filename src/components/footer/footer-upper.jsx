@@ -71,9 +71,9 @@ function FooterUpper() {
                       <div class="pull-left info-group-icon fa fa-lg fa-phone"></div>
                       <div class="pull-left">
                         <p>
-                          <span class="color-gray-medium">Toll Free:</span>{" "}
-                          <a class="color-white" href="tel:8009287869">
-                            800-928-7869
+                          <span class="color-gray-medium">Telephone:</span>{" "}
+                          <a class="color-white" href="#">
+                            +234-------
                           </a>
                           <br />
                         </p>

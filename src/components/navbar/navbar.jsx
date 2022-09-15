@@ -112,6 +112,16 @@ const NavBar = () => {
                   >
                     <Link to="/contact">Contact</Link>
                   </li>
+
+                  <li
+                    className={
+                      splitLocation[1] === "driver-register-form"
+                        ? "sp-menu-item active"
+                        : "sp-menu-item "
+                    }
+                  >
+                    <Link to="/driver/register/2">Contact</Link>
+                  </li>
                 </ul>
               </div>
             </div>

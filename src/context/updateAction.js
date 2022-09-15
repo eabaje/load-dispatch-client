@@ -7,5 +7,9 @@ export default function updateAction(state, payload) {
       ...state.companyUser,
       ...payload,
     },
+    driver: {
+      ...state.driver,
+      ...payload,
+    },
   };
 }
