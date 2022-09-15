@@ -83,7 +83,7 @@ function FooterUpper() {
                     <br />
 
                     <a href="/register" class="btn btn-default">
-                      Try us out for 90-days at no-charge*!
+                      Try us out for 30-days at no-charge*!
                     </a>
                   </div>
                 </div>
