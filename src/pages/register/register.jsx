@@ -104,7 +104,7 @@ function Register() {
 
   function onChange(event) {
     setValue(event.target.value);
-    state.companyUser.Specilaization =
+    state.companyUser.Specialization =
       event.target.options[event.target.selectedIndex].text;
     console.log(
       "value:",
@@ -141,6 +141,7 @@ function Register() {
     state.companyUser.PaymentMethod = paymentMethod;
     state.companyUser.Currency = currency;
     state.companyUser.CompanyType = data.RoleType;
+   // state.companyUser.Specilaization=data.RoleType;
 
     setLoading(true);
     setDisabled(true);
